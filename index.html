@@ -18,46 +18,76 @@
     overflow: hidden;
     touch-action: none;
   }
-  #container {
-    display: flex;
+  /* Marco exterior simulando el visor VR */
+  #vr-frame {
     width: 100vw;
     height: 100vh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    gap: 14px;
+  }
+  #container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 14px;
+    align-items: center;
+    justify-content: center;
   }
   .eye-panel {
-    width: 50%;
-    height: 100%;
+    width: calc(50% - 7px);
+    height: 96%;
     position: relative;
     overflow: hidden;
+    background: #000;
   }
+  /* Bordes curvos como lentes VR: exteriores más redondeados */
   .eye-panel.left {
-    border-right: 2px solid #000;
+    border-radius: 40px 20px 20px 40px;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.08);
   }
   .eye-panel.right {
-    border-left: 2px solid #000;
+    border-radius: 20px 40px 40px 20px;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.08);
+  }
+  /* Simulación sutil de borde de lente */
+  .eye-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 40px 10px rgba(0,0,0,0.35);
+    pointer-events: none;
+    z-index: 2;
   }
   video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: inherit;
   }
   .label {
     position: absolute;
-    top: 8px;
-    color: rgba(255, 255, 255, 0.6);
+    top: 14px;
+    color: rgba(255, 255, 255, 0.55);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 2px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
     pointer-events: none;
     user-select: none;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    z-index: 3;
   }
   .left .label {
-    left: 12px;
+    left: 18px;
   }
   .right .label {
-    right: 12px;
+    right: 18px;
   }
   #error-msg {
     position: fixed;
@@ -113,7 +143,7 @@
   }
   #cam-switch {
     position: fixed;
-    bottom: 20px;
+    bottom: 18px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
@@ -126,12 +156,12 @@
     display: flex;
   }
   #cam-switch button {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 10px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 22px;
     font-size: 14px;
     font-weight: 500;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -142,10 +172,10 @@
     text-align: center;
   }
   #cam-switch button:active {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.28);
   }
   #cam-name {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 12px;
     font-weight: 500;
@@ -155,8 +185,9 @@
     opacity: 0;
     transition: opacity 0.3s ease;
     background: rgba(0, 0, 0, 0.5);
-    padding: 4px 12px;
+    padding: 4px 14px;
     border-radius: 12px;
+    backdrop-filter: blur(4px);
   }
   #cam-name.show {
     opacity: 1;
@@ -175,14 +206,16 @@
   <p id="error-text">No se pudo acceder a la cámara.</p>
 </div>
 
-<div id="container">
-  <div class="eye-panel left">
-    <video id="videoL" autoplay playsinline muted></video>
-    <span class="label">L</span>
-  </div>
-  <div class="eye-panel right">
-    <video id="videoR" autoplay playsinline muted></video>
-    <span class="label">R</span>
+<div id="vr-frame">
+  <div id="container">
+    <div class="eye-panel left">
+      <video id="videoL" autoplay playsinline muted></video>
+      <span class="label">L</span>
+    </div>
+    <div class="eye-panel right">
+      <video id="videoR" autoplay playsinline muted></video>
+      <span class="label">R</span>
+    </div>
   </div>
 </div>
 
@@ -208,7 +241,6 @@
   async function startCamera() {
     startBtn.classList.add('hidden');
 
-    // Primero pedimos acceso básico para poder enumerar dispositivos con labels
     try {
       stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' },
@@ -219,18 +251,15 @@
       return;
     }
 
-    // Asignar stream inicial
     videoL.srcObject = stream;
     videoR.srcObject = stream;
     try {
       await videoL.play();
       await videoR.play();
-    } catch (e) { /* autoplay con muted suele bastar */ }
+    } catch (e) { }
 
-    // Enumerar cámaras disponibles
     await listCameras();
 
-    // Si hay más de una cámara trasera, mostrar controles
     if (videoDevices.length > 1) {
       camSwitch.classList.add('active');
       showCamName(videoDevices[currentCamIndex].label);
@@ -240,20 +269,13 @@
   async function listCameras() {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
-      // Filtrar solo videoinput y preferir cámaras traseras
       let cams = devices.filter(d => d.kind === 'videoinput');
-
-      // Ordenar: cámaras con label que contenga "back" primero
       cams.sort((a, b) => {
         const aBack = /back|trasera|rear|environment/i.test(a.label);
         const bBack = /back|trasera|rear|environment/i.test(b.label);
         return bBack - aBack;
       });
-
-      // Si no hay labels útiles (permiso no otorgado), igual guardamos deviceIds
       videoDevices = cams;
-
-      // Encontrar índice de la cámara activa actual
       const currentTrack = stream.getVideoTracks()[0];
       const currentSettings = currentTrack.getSettings();
       if (currentSettings.deviceId) {
@@ -267,30 +289,22 @@
 
   async function switchCamera() {
     if (videoDevices.length === 0) return;
-
-    // Avanzar al siguiente dispositivo
     currentCamIndex = (currentCamIndex + 1) % videoDevices.length;
     const device = videoDevices[currentCamIndex];
 
-    // Detener stream anterior
     if (stream) {
       stream.getTracks().forEach(t => t.stop());
     }
 
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          deviceId: { exact: device.deviceId }
-        },
+        video: { deviceId: { exact: device.deviceId } },
         audio: false
       });
     } catch (err) {
-      // Fallback sin exact
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            deviceId: device.deviceId
-          },
+          video: { deviceId: device.deviceId },
           audio: false
         });
       } catch (err2) {
@@ -310,7 +324,6 @@
   }
 
   function showCamName(name) {
-    // Limpiar nombre técnico para mostrar algo legible
     let display = name
       .replace(/\(.*\)/g, '')
       .replace(/Back\s*/i, '')
