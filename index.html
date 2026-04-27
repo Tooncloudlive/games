@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>VR Camera</title>
+<title>VR Camera Max Quality</title>
 <style>
   * {
     margin: 0;
@@ -229,6 +229,7 @@
   <div id="cam-info">
     <span id="cam-name" class="info-badge"></span>
     <span id="res-badge" class="info-badge"></span>
+    <span id="fps-badge" class="info-badge"></span>
   </div>
   <button onclick="switchCamera()">Cambiar cámara</button>
 </div>
@@ -243,37 +244,103 @@
   const camInfo = document.getElementById('cam-info');
   const camName = document.getElementById('cam-name');
   const resBadge = document.getElementById('res-badge');
+  const fpsBadge = document.getElementById('fps-badge');
 
   let stream = null;
   let videoDevices = [];
   let currentCamIndex = 0;
   let infoTimeout = null;
+  let capabilityCache = new Map(); // Cache de capacidades por deviceId
 
-  /* ---------- Constraints de alta calidad ---------- */
-  function buildVideoConstraints(deviceId, isFacingMode = false) {
+  /* ---------- Utilidades de calidad ---------- */
+  function getAdvancedConstraints(base) {
+    return {
+      ...base,
+      advanced: [
+        { width: 3840, height: 2160 },
+        { width: 4096, height: 2160 },
+        { width: 2560, height: 1440 },
+        { width: 1920, height: 1080 }
+      ]
+    };
+  }
+
+  /* ---------- Consultar capacidades reales de la camara ---------- */
+  async function probeCameraCapabilities(deviceId, isFacingMode = false) {
+    const key = isFacingMode ? deviceId : deviceId;
+    if (capabilityCache.has(key)) return capabilityCache.get(key);
+
+    // Obtener un stream rápido solo para leer capabilities
+    const probeConstraints = isFacingMode
+      ? { video: { facingMode: deviceId } }
+      : { video: { deviceId: { exact: deviceId } } };
+
+    let probeStream = null;
+    try {
+      probeStream = await navigator.mediaDevices.getUserMedia(probeConstraints);
+      const track = probeStream.getVideoTracks()[0];
+      const capabilities = track.getCapabilities ? track.getCapabilities() : {};
+      const settings = track.getSettings();
+      capabilityCache.set(key, { capabilities, settings });
+      return { capabilities, settings };
+    } catch (e) {
+      return { capabilities: {}, settings: {} };
+    } finally {
+      if (probeStream) probeStream.getTracks().forEach(t => t.stop());
+    }
+  }
+
+  function getMaxResolutionFromCapabilities(capabilities) {
+    if (!capabilities || !capabilities.width || !capabilities.height) {
+      return { width: 1920, height: 1080 };
+    }
+    // width/height en capabilities son { max, min, step }
+    const maxW = capabilities.width.max || 1920;
+    const maxH = capabilities.height.max || 1080;
+    // Cap a valores razonables (algunas cámaras reportan valores muy altos que no son alcanzables)
+    if (maxW >= 3840 && maxH >= 2160) return { width: 3840, height: 2160 };
+    if (maxW >= 2560 && maxH >= 1440) return { width: 2560, height: 1440 };
+    if (maxW >= 1920 && maxH >= 1080) return { width: 1920, height: 1080 };
+    return { width: maxW, height: maxH };
+  }
+
+  /* ---------- Constraints de alta calidad usando capacidades reales ---------- */
+  async function buildBestVideoConstraints(deviceId, isFacingMode = false) {
+    const probe = await probeCameraCapabilities(deviceId, isFacingMode);
+    const maxRes = getMaxResolutionFromCapabilities(probe.capabilities);
+
     const base = {
-      width: { ideal: 3840, min: 1280 },
-      height: { ideal: 2160, min: 720 },
+      width: { ideal: maxRes.width, min: 1280 },
+      height: { ideal: maxRes.height, min: 720 },
       frameRate: { ideal: 30, min: 15 }
     };
+
+    // Activar foco continuo si está disponible (mejora nitidez)
+    if (probe.capabilities && probe.capabilities.focusMode && probe.capabilities.focusMode.includes('continuous')) {
+      base.focusMode = 'continuous';
+    }
+
     if (isFacingMode) {
       base.facingMode = deviceId; // 'environment'
     } else {
       base.deviceId = { exact: deviceId };
     }
-    return base;
+
+    return getAdvancedConstraints(base);
   }
 
-  function buildFallbackConstraints(deviceId, isFacingMode = false) {
+  function buildFallbackConstraints(deviceId, isFacingMode = false, useExact = true) {
     const base = {
-      width: { ideal: 1920 },
-      height: { ideal: 1080 },
-      frameRate: { ideal: 30 }
+      width: { ideal: 1920, min: 1280 },
+      height: { ideal: 1080, min: 720 },
+      frameRate: { ideal: 30, min: 15 }
     };
     if (isFacingMode) {
       base.facingMode = deviceId;
+    } else if (useExact) {
+      base.deviceId = { exact: deviceId };
     } else {
-      base.deviceId = deviceId; // sin exact
+      base.deviceId = { ideal: deviceId };
     }
     return base;
   }
@@ -282,21 +349,20 @@
   async function startCamera() {
     startBtn.classList.add('hidden');
 
-    // Intentar 4K/UHD primero
+    const constraints = await buildBestVideoConstraints('environment', true);
+
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        video: buildVideoConstraints('environment', true),
+        video: constraints,
         audio: false
       });
     } catch (err) {
-      // Fallback a Full HD
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: buildFallbackConstraints('environment', true),
+          video: buildFallbackConstraints('environment', true, false),
           audio: false
         });
       } catch (err2) {
-        // Último fallback sin resolución específica
         try {
           stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment' },
@@ -324,7 +390,7 @@
     showCamInfo(videoDevices[currentCamIndex]?.label);
   }
 
-  /* ---------- Listado de cámaras ---------- */
+  /* ---------- Listado de camaras ---------- */
   async function listCameras() {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -342,11 +408,11 @@
         if (idx !== -1) currentCamIndex = idx;
       }
     } catch (err) {
-      console.error('Error enumerando cámaras:', err);
+      console.error('Error enumerando camaras:', err);
     }
   }
 
-  /* ---------- Cambiar cámara ---------- */
+  /* ---------- Cambiar camara ---------- */
   async function switchCamera() {
     if (videoDevices.length === 0) return;
     currentCamIndex = (currentCamIndex + 1) % videoDevices.length;
@@ -356,24 +422,23 @@
       stream.getTracks().forEach(t => t.stop());
     }
 
-    // Intentar máxima resolución con deviceId exacto
+    const constraints = await buildBestVideoConstraints(device.deviceId, false);
+
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        video: buildVideoConstraints(device.deviceId, false),
+        video: constraints,
         audio: false
       });
     } catch (err) {
-      // Fallback sin exact y con resolución menor
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: buildFallbackConstraints(device.deviceId, false),
+          video: buildFallbackConstraints(device.deviceId, false, true),
           audio: false
         });
       } catch (err2) {
-        // Último fallback simple
         try {
           stream = await navigator.mediaDevices.getUserMedia({
-            video: { deviceId: device.deviceId },
+            video: { deviceId: { ideal: device.deviceId } },
             audio: false
           });
         } catch (err3) {
@@ -411,18 +476,23 @@
       display = `Cámara ${currentCamIndex + 1}`;
     }
 
-    // Resolución real del track
+    // Resolucion real del track
     const track = stream?.getVideoTracks()[0];
     let resText = '';
+    let fpsText = '';
     if (track) {
       const s = track.getSettings();
       if (s.width && s.height) {
         resText = `${s.width}x${s.height}`;
       }
+      if (s.frameRate) {
+        fpsText = `${Math.round(s.frameRate)} FPS`;
+      }
     }
 
     camName.textContent = display;
     resBadge.textContent = resText;
+    fpsBadge.textContent = fpsText;
     camInfo.classList.add('show');
     clearTimeout(infoTimeout);
     infoTimeout = setTimeout(() => {
