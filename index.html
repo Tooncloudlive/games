@@ -150,7 +150,7 @@
     display: none;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
   #cam-switch.active {
     display: flex;
@@ -174,23 +174,29 @@
   #cam-switch button:active {
     background: rgba(255, 255, 255, 0.28);
   }
-  #cam-name {
+  #cam-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #cam-info.show {
+    opacity: 1;
+  }
+  .info-badge {
     color: rgba(255, 255, 255, 0.9);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.5px;
     text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
     background: rgba(0, 0, 0, 0.5);
-    padding: 4px 14px;
+    padding: 4px 12px;
     border-radius: 12px;
     backdrop-filter: blur(4px);
-  }
-  #cam-name.show {
-    opacity: 1;
+    white-space: nowrap;
   }
 </style>
 <base target="_blank">
@@ -220,7 +226,10 @@
 </div>
 
 <div id="cam-switch">
-  <div id="cam-name"></div>
+  <div id="cam-info">
+    <span id="cam-name" class="info-badge"></span>
+    <span id="res-badge" class="info-badge"></span>
+  </div>
   <button onclick="switchCamera()">Cambiar cámara</button>
 </div>
 
@@ -231,24 +240,73 @@
   const errorText = document.getElementById('error-text');
   const startBtn = document.getElementById('start-btn');
   const camSwitch = document.getElementById('cam-switch');
+  const camInfo = document.getElementById('cam-info');
   const camName = document.getElementById('cam-name');
+  const resBadge = document.getElementById('res-badge');
 
   let stream = null;
   let videoDevices = [];
   let currentCamIndex = 0;
-  let nameTimeout = null;
+  let infoTimeout = null;
 
+  /* ---------- Constraints de alta calidad ---------- */
+  function buildVideoConstraints(deviceId, isFacingMode = false) {
+    const base = {
+      width: { ideal: 3840, min: 1280 },
+      height: { ideal: 2160, min: 720 },
+      frameRate: { ideal: 30, min: 15 }
+    };
+    if (isFacingMode) {
+      base.facingMode = deviceId; // 'environment'
+    } else {
+      base.deviceId = { exact: deviceId };
+    }
+    return base;
+  }
+
+  function buildFallbackConstraints(deviceId, isFacingMode = false) {
+    const base = {
+      width: { ideal: 1920 },
+      height: { ideal: 1080 },
+      frameRate: { ideal: 30 }
+    };
+    if (isFacingMode) {
+      base.facingMode = deviceId;
+    } else {
+      base.deviceId = deviceId; // sin exact
+    }
+    return base;
+  }
+
+  /* ---------- Inicio ---------- */
   async function startCamera() {
     startBtn.classList.add('hidden');
 
+    // Intentar 4K/UHD primero
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
+        video: buildVideoConstraints('environment', true),
         audio: false
       });
     } catch (err) {
-      showError(err);
-      return;
+      // Fallback a Full HD
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: buildFallbackConstraints('environment', true),
+          audio: false
+        });
+      } catch (err2) {
+        // Último fallback sin resolución específica
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' },
+            audio: false
+          });
+        } catch (err3) {
+          showError(err3);
+          return;
+        }
+      }
     }
 
     videoL.srcObject = stream;
@@ -262,10 +320,11 @@
 
     if (videoDevices.length > 1) {
       camSwitch.classList.add('active');
-      showCamName(videoDevices[currentCamIndex].label);
     }
+    showCamInfo(videoDevices[currentCamIndex]?.label);
   }
 
+  /* ---------- Listado de cámaras ---------- */
   async function listCameras() {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
@@ -287,6 +346,7 @@
     }
   }
 
+  /* ---------- Cambiar cámara ---------- */
   async function switchCamera() {
     if (videoDevices.length === 0) return;
     currentCamIndex = (currentCamIndex + 1) % videoDevices.length;
@@ -296,20 +356,30 @@
       stream.getTracks().forEach(t => t.stop());
     }
 
+    // Intentar máxima resolución con deviceId exacto
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        video: { deviceId: { exact: device.deviceId } },
+        video: buildVideoConstraints(device.deviceId, false),
         audio: false
       });
     } catch (err) {
+      // Fallback sin exact y con resolución menor
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { deviceId: device.deviceId },
+          video: buildFallbackConstraints(device.deviceId, false),
           audio: false
         });
       } catch (err2) {
-        showError(err2);
-        return;
+        // Último fallback simple
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: { deviceId: device.deviceId },
+            audio: false
+          });
+        } catch (err3) {
+          showError(err3);
+          return;
+        }
       }
     }
 
@@ -320,11 +390,13 @@
       await videoR.play();
     } catch (e) { }
 
-    showCamName(device.label || `Cámara ${currentCamIndex + 1}`);
+    showCamInfo(device.label);
   }
 
-  function showCamName(name) {
-    let display = name
+  /* ---------- Info en pantalla ---------- */
+  function showCamInfo(rawLabel) {
+    // Nombre limpio
+    let display = (rawLabel || `Cámara ${currentCamIndex + 1}`)
       .replace(/\(.*\)/g, '')
       .replace(/Back\s*/i, '')
       .replace(/Camera/i, 'Cámara')
@@ -339,14 +411,26 @@
       display = `Cámara ${currentCamIndex + 1}`;
     }
 
+    // Resolución real del track
+    const track = stream?.getVideoTracks()[0];
+    let resText = '';
+    if (track) {
+      const s = track.getSettings();
+      if (s.width && s.height) {
+        resText = `${s.width}x${s.height}`;
+      }
+    }
+
     camName.textContent = display;
-    camName.classList.add('show');
-    clearTimeout(nameTimeout);
-    nameTimeout = setTimeout(() => {
-      camName.classList.remove('show');
-    }, 2000);
+    resBadge.textContent = resText;
+    camInfo.classList.add('show');
+    clearTimeout(infoTimeout);
+    infoTimeout = setTimeout(() => {
+      camInfo.classList.remove('show');
+    }, 2500);
   }
 
+  /* ---------- Errores ---------- */
   function showError(err) {
     let message = 'No se pudo acceder a la cámara.';
     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
