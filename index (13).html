@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>VR Camera</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    touch-action: none;
+  }
+  #container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+  }
+  .eye-panel {
+    width: 50%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .eye-panel.left {
+    border-right: 2px solid #000;
+  }
+  .eye-panel.right {
+    border-left: 2px solid #000;
+  }
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .label {
+    position: absolute;
+    top: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    pointer-events: none;
+    user-select: none;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  }
+  .left .label {
+    left: 12px;
+  }
+  .right .label {
+    right: 12px;
+  }
+  #error-msg {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    text-align: center;
+    padding: 20px;
+    z-index: 10;
+  }
+  #error-msg.active {
+    display: flex;
+  }
+  #error-msg h1 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #ff453a;
+  }
+  #error-msg p {
+    font-size: 15px;
+    line-height: 1.5;
+    opacity: 0.85;
+    max-width: 320px;
+  }
+  #start-btn {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    z-index: 20;
+  }
+  #start-btn.hidden {
+    display: none;
+  }
+  #start-btn button {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border-radius: 12px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div id="start-btn">
+  <button onclick="startCamera()">Iniciar Cámara VR</button>
+</div>
+
+<div id="error-msg">
+  <h1>Error de cámara</h1>
+  <p id="error-text">No se pudo acceder a la cámara.</p>
+</div>
+
+<div id="container">
+  <div class="eye-panel left">
+    <video id="videoL" autoplay playsinline muted></video>
+    <span class="label">L</span>
+  </div>
+  <div class="eye-panel right">
+    <video id="videoR" autoplay playsinline muted></video>
+    <span class="label">R</span>
+  </div>
+</div>
+
+<script>
+  const videoL = document.getElementById('videoL');
+  const videoR = document.getElementById('videoR');
+  const errorMsg = document.getElementById('error-msg');
+  const errorText = document.getElementById('error-text');
+  const startBtn = document.getElementById('start-btn');
+  let stream = null;
+
+  async function startCamera() {
+    startBtn.classList.add('hidden');
+
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { exact: 'environment' }
+        },
+        audio: false
+      });
+    } catch (err) {
+      // Si 'exact' falla (algunos dispositivos no lo soportan), probar sin 'exact'
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: 'environment'
+          },
+          audio: false
+        });
+      } catch (err2) {
+        showError(err2);
+        return;
+      }
+    }
+
+    videoL.srcObject = stream;
+    videoR.srcObject = stream;
+
+    // Forzar play en iOS Safari
+    try {
+      await videoL.play();
+      await videoR.play();
+    } catch (playErr) {
+      // Algunos navegadores no necesitan esto con autoplay + muted
+    }
+  }
+
+  function showError(err) {
+    let message = 'No se pudo acceder a la cámara.';
+    if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+      message = 'Permiso denegado. Por favor permite el acceso a la cámara en la configuración de tu navegador.';
+    } else if (err.name === 'NotFoundError') {
+      message = 'No se encontró una cámara trasera en este dispositivo.';
+    } else if (err.name === 'NotReadableError') {
+      message = 'La cámara está siendo usada por otra aplicación.';
+    } else if (err.message) {
+      message = err.message;
+    }
+    errorText.textContent = message;
+    errorMsg.classList.add('active');
+  }
+
+  // Limpiar al cerrar
+  window.addEventListener('beforeunload', () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+  });
+
+  // Bloquear zoom y scroll en iOS
+  document.addEventListener('gesturestart', e => e.preventDefault());
+  document.addEventListener('gesturechange', e => e.preventDefault());
+  document.addEventListener('gestureend', e => e.preventDefault());
+</script>
+
+</body>
+</html>
