@@ -111,7 +111,58 @@
     cursor: pointer;
     letter-spacing: 0.5px;
   }
+  #cam-switch {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  #cam-switch.active {
+    display: flex;
+  }
+  #cam-switch button {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    border-radius: 20px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    min-width: 140px;
+    text-align: center;
+  }
+  #cam-switch button:active {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  #cam-name {
+    color: rgba(255, 255, 255, 0.85);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 12px;
+    border-radius: 12px;
+  }
+  #cam-name.show {
+    opacity: 1;
+  }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -135,30 +186,110 @@
   </div>
 </div>
 
+<div id="cam-switch">
+  <div id="cam-name"></div>
+  <button onclick="switchCamera()">Cambiar cámara</button>
+</div>
+
 <script>
   const videoL = document.getElementById('videoL');
   const videoR = document.getElementById('videoR');
   const errorMsg = document.getElementById('error-msg');
   const errorText = document.getElementById('error-text');
   const startBtn = document.getElementById('start-btn');
+  const camSwitch = document.getElementById('cam-switch');
+  const camName = document.getElementById('cam-name');
+
   let stream = null;
+  let videoDevices = [];
+  let currentCamIndex = 0;
+  let nameTimeout = null;
 
   async function startCamera() {
     startBtn.classList.add('hidden');
 
+    // Primero pedimos acceso básico para poder enumerar dispositivos con labels
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' },
+        audio: false
+      });
+    } catch (err) {
+      showError(err);
+      return;
+    }
+
+    // Asignar stream inicial
+    videoL.srcObject = stream;
+    videoR.srcObject = stream;
+    try {
+      await videoL.play();
+      await videoR.play();
+    } catch (e) { /* autoplay con muted suele bastar */ }
+
+    // Enumerar cámaras disponibles
+    await listCameras();
+
+    // Si hay más de una cámara trasera, mostrar controles
+    if (videoDevices.length > 1) {
+      camSwitch.classList.add('active');
+      showCamName(videoDevices[currentCamIndex].label);
+    }
+  }
+
+  async function listCameras() {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      // Filtrar solo videoinput y preferir cámaras traseras
+      let cams = devices.filter(d => d.kind === 'videoinput');
+
+      // Ordenar: cámaras con label que contenga "back" primero
+      cams.sort((a, b) => {
+        const aBack = /back|trasera|rear|environment/i.test(a.label);
+        const bBack = /back|trasera|rear|environment/i.test(b.label);
+        return bBack - aBack;
+      });
+
+      // Si no hay labels útiles (permiso no otorgado), igual guardamos deviceIds
+      videoDevices = cams;
+
+      // Encontrar índice de la cámara activa actual
+      const currentTrack = stream.getVideoTracks()[0];
+      const currentSettings = currentTrack.getSettings();
+      if (currentSettings.deviceId) {
+        const idx = videoDevices.findIndex(d => d.deviceId === currentSettings.deviceId);
+        if (idx !== -1) currentCamIndex = idx;
+      }
+    } catch (err) {
+      console.error('Error enumerando cámaras:', err);
+    }
+  }
+
+  async function switchCamera() {
+    if (videoDevices.length === 0) return;
+
+    // Avanzar al siguiente dispositivo
+    currentCamIndex = (currentCamIndex + 1) % videoDevices.length;
+    const device = videoDevices[currentCamIndex];
+
+    // Detener stream anterior
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+    }
+
     try {
       stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: { exact: 'environment' }
+          deviceId: { exact: device.deviceId }
         },
         audio: false
       });
     } catch (err) {
-      // Si 'exact' falla (algunos dispositivos no lo soportan), probar sin 'exact'
+      // Fallback sin exact
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: 'environment'
+            deviceId: device.deviceId
           },
           audio: false
         });
@@ -170,14 +301,37 @@
 
     videoL.srcObject = stream;
     videoR.srcObject = stream;
-
-    // Forzar play en iOS Safari
     try {
       await videoL.play();
       await videoR.play();
-    } catch (playErr) {
-      // Algunos navegadores no necesitan esto con autoplay + muted
+    } catch (e) { }
+
+    showCamName(device.label || `Cámara ${currentCamIndex + 1}`);
+  }
+
+  function showCamName(name) {
+    // Limpiar nombre técnico para mostrar algo legible
+    let display = name
+      .replace(/\(.*\)/g, '')
+      .replace(/Back\s*/i, '')
+      .replace(/Camera/i, 'Cámara')
+      .replace(/Dual/i, 'Doble')
+      .replace(/Triple/i, 'Triple')
+      .replace(/Ultra\s*Wide/i, 'Ultra Wide')
+      .replace(/Wide/i, 'Wide')
+      .replace(/Telephoto/i, 'Telefoto')
+      .trim();
+
+    if (!display || display.length < 2) {
+      display = `Cámara ${currentCamIndex + 1}`;
     }
+
+    camName.textContent = display;
+    camName.classList.add('show');
+    clearTimeout(nameTimeout);
+    nameTimeout = setTimeout(() => {
+      camName.classList.remove('show');
+    }, 2000);
   }
 
   function showError(err) {
@@ -185,9 +339,11 @@
     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
       message = 'Permiso denegado. Por favor permite el acceso a la cámara en la configuración de tu navegador.';
     } else if (err.name === 'NotFoundError') {
-      message = 'No se encontró una cámara trasera en este dispositivo.';
+      message = 'No se encontró la cámara seleccionada.';
     } else if (err.name === 'NotReadableError') {
       message = 'La cámara está siendo usada por otra aplicación.';
+    } else if (err.name === 'OverconstrainedError') {
+      message = 'La cámara no soporta la configuración solicitada.';
     } else if (err.message) {
       message = err.message;
     }
@@ -195,14 +351,12 @@
     errorMsg.classList.add('active');
   }
 
-  // Limpiar al cerrar
   window.addEventListener('beforeunload', () => {
     if (stream) {
       stream.getTracks().forEach(track => track.stop());
     }
   });
 
-  // Bloquear zoom y scroll en iOS
   document.addEventListener('gesturestart', e => e.preventDefault());
   document.addEventListener('gesturechange', e => e.preventDefault());
   document.addEventListener('gestureend', e => e.preventDefault());
