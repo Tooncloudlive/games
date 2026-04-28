@@ -48,31 +48,25 @@
     background: #000;
     /* Forma de lente VR: óvalo más redondeado por fuera, menos por dentro */
     border-radius: 50% / 15%;
-  }
-  .eye-panel.left {
-    border-radius: 50% 30% 30% 50% / 15% 8% 8% 15%;
     /* Sombra de marco del visor */
     box-shadow:
       inset 0 0 80px 20px rgba(0,0,0,0.6),
       inset 0 0 20px 4px rgba(255,255,255,0.03);
   }
+  .eye-panel.left {
+    border-radius: 50% 30% 30% 50% / 15% 8% 8% 15%;
+  }
   .eye-panel.right {
     border-radius: 30% 50% 50% 30% / 8% 15% 15% 8%;
-    box-shadow:
-      inset 0 0 80px 20px rgba(0,0,0,0.6),
-      inset 0 0 20px 4px rgba(255,255,255,0.03);
   }
 
-  /* ====== VIDEO CON DISTORSION ====== */
-  video {
+  /* ====== CANVAS WEBGL ====== */
+  canvas {
     position: absolute;
-    inset: -15%; /* Overflow para que la distorsion no deje huecos */
-    width: 130%;
-    height: 130%;
-    object-fit: cover;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     display: block;
-    /* Filtro SVG de barrel distortion + chromatic aberration leve */
-    filter: url(#barrel-distortion);
   }
 
   /* ====== OVERLAYS DE LENTE ====== */
@@ -82,7 +76,6 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    /* Un radial gradient que oscurece los bordes de forma óptica */
     background: radial-gradient(
       ellipse 85% 90% at center,
       transparent 55%,
@@ -101,7 +94,6 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    /* Simula el reflejo de una lente convexa */
     background: radial-gradient(
       ellipse 70% 60% at 35% 25%,
       rgba(255,255,255,0.06) 0%,
@@ -128,7 +120,7 @@
     mix-blend-mode: screen;
   }
 
-  /* ====== SCRATCH/DUST TEXTURE (opcional) ====== */
+  /* ====== SCRATCH/DUST TEXTURE ====== */
   .lens-dust {
     position: absolute;
     inset: 0;
@@ -136,7 +128,6 @@
     opacity: 0.15;
     pointer-events: none;
     z-index: 5;
-    /* Pequeños puntos aleatorios simulando polvo en la lente */
     background-image:
       radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0.5px, transparent 1px),
       radial-gradient(circle at 70% 60%, rgba(255,255,255,0.2) 0.3px, transparent 0.8px),
@@ -161,7 +152,7 @@
   .left .label { left: 22px; }
   .right .label { right: 22px; }
 
-  /* ====== SCANLINE (efecto pantalla) ====== */
+  /* ====== SCANLINE ====== */
   .scanlines {
     position: absolute;
     inset: 0;
@@ -283,66 +274,24 @@
     backdrop-filter: blur(4px);
     white-space: nowrap;
   }
+
+  /* Video fuera de pantalla (fuente de textura WebGL) */
+  #video-source {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
 </style>
 <base target="_blank">
 </head>
 <body>
 
-<!-- ====== SVG FILTERS (barrel distortion + chromatic aberration) ====== -->
-<svg width="0" height="0" style="position:absolute;">
-  <defs>
-    <!--
-      Barrel distortion que simula lentes VR:
-      - expande los píxeles hacia los bordes (efecto bulbo)
-      - chromatic aberration leve (RGB separado en los bordes)
-    -->
-    <filter id="barrel-distortion" x="-20%" y="-20%" width="140%" height="140%">
-      <!-- Barrel distortion usando displacement map -->
-      <feImage result="distortionMap" xlink:href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='50%25' r='70.71%25'%3E%3Cstop offset='0%25' stop-color='%23000080'/%3E%3Cstop offset='35%25' stop-color='%23808080'/%3E%3Cstop offset='100%25' stop-color='%23ffffff'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='512' height='512' fill='url(%23g)'/%3E%3C/svg%3E" />
-      
-      <!-- Canal R: desplazamiento más fuerte (magnificado) -->
-      <feColorMatrix type="matrix" in="SourceGraphic" result="red"
-        values="1 0 0 0 0
-                0 0 0 0 0
-                0 0 0 0 0
-                0 0 0 1 0" />
-      <feDisplacementMap in="red" in2="distortionMap" scale="18" xChannelSelector="R" yChannelSelector="G" result="redDisp" />
-      
-      <!-- Canal G: desplazamiento medio -->
-      <feColorMatrix type="matrix" in="SourceGraphic" result="green"
-        values="0 0 0 0 0
-                0 1 0 0 0
-                0 0 0 0 0
-                0 0 0 1 0" />
-      <feDisplacementMap in="green" in2="distortionMap" scale="10" xChannelSelector="R" yChannelSelector="G" result="greenDisp" />
-      
-      <!-- Canal B: desplazamiento menor -->
-      <feColorMatrix type="matrix" in="SourceGraphic" result="blue"
-        values="0 0 0 0 0
-                0 0 0 0 0
-                0 0 1 0 0
-                0 0 0 1 0" />
-      <feDisplacementMap in="blue" in2="distortionMap" scale="4" xChannelSelector="R" yChannelSelector="G" result="blueDisp" />
-      
-      <!-- Combinar canales con aberración cromática -->
-      <feBlend mode="screen" in="redDisp" in2="greenDisp" result="rg" />
-      <feBlend mode="screen" in="rg" in2="blueDisp" result="blended" />
-      
-      <!-- Ajuste de contraste para compensar la expansión -->
-      <feComponentTransfer in="blended" result="contrasted">
-        <feFuncR type="gamma" amplitude="1.1" exponent="0.95" offset="-0.02" />
-        <feFuncG type="gamma" amplitude="1.1" exponent="0.95" offset="-0.02" />
-        <feFuncB type="gamma" amplitude="1.1" exponent="0.95" offset="-0.02" />
-      </feComponentTransfer>
-    </filter>
-
-    <!-- Alternativa más simple si el navegador no soporta el complejo -->
-    <filter id="simple-barrel" x="-15%" y="-15%" width="130%" height="130%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="1" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="25" xChannelSelector="R" yChannelSelector="G" />
-    </filter>
-  </defs>
-</svg>
+<!-- Video oculto: fuente de textura para WebGL -->
+<video id="video-source" autoplay playsinline muted></video>
 
 <div id="start-btn">
   <button onclick="startCamera()">Iniciar Cámara VR</button>
@@ -356,14 +305,14 @@
 <div id="vr-frame">
   <div id="container">
     <div class="eye-panel left">
-      <video id="videoL" autoplay playsinline muted></video>
+      <canvas id="canvasL"></canvas>
       <div class="lens-glare"></div>
       <div class="lens-dust"></div>
       <div class="scanlines"></div>
       <span class="label">L</span>
     </div>
     <div class="eye-panel right">
-      <video id="videoR" autoplay playsinline muted></video>
+      <canvas id="canvasR"></canvas>
       <div class="lens-glare"></div>
       <div class="lens-dust"></div>
       <div class="scanlines"></div>
@@ -382,8 +331,10 @@
 </div>
 
 <script>
-  const videoL = document.getElementById('videoL');
-  const videoR = document.getElementById('videoR');
+  // ====== DOM REFS ======
+  const videoSource = document.getElementById('video-source');
+  const canvasL = document.getElementById('canvasL');
+  const canvasR = document.getElementById('canvasR');
   const errorMsg = document.getElementById('error-msg');
   const errorText = document.getElementById('error-text');
   const startBtn = document.getElementById('start-btn');
@@ -398,7 +349,203 @@
   let currentCamIndex = 0;
   let infoTimeout = null;
   let capabilityCache = new Map();
+  let animationId = null;
 
+  // ====== SHADERS ======
+  const VERTEX_SHADER = `
+    attribute vec2 a_position;
+    attribute vec2 a_texCoord;
+    varying vec2 v_texCoord;
+    void main() {
+      gl_Position = vec4(a_position, 0.0, 1.0);
+      v_texCoord = a_texCoord;
+    }
+  `;
+
+  const FRAGMENT_SHADER = `
+    precision mediump float;
+    varying vec2 v_texCoord;
+    uniform sampler2D u_video;
+    uniform vec2 u_resolution;
+    uniform float u_barrelPower;
+    uniform float u_chromatic;
+
+    void main() {
+      vec2 uv = v_texCoord;
+      vec2 center = vec2(0.5, 0.5);
+      vec2 delta = uv - center;
+      float dist = length(delta);
+
+      // Barrel distortion factor
+      float r2 = dist * dist;
+      float r4 = r2 * r2;
+      float distortion = 1.0 + u_barrelPower * r2 + (u_barrelPower * 0.5) * r4;
+
+      // Escalar un poco para compensar que los bordes se expanden
+      float scaleCompensation = 1.0 / (1.0 + u_barrelPower * 0.5);
+      vec2 distortedDelta = delta * distortion * scaleCompensation;
+
+      // Chromatic aberration: canales RGB con distinta distorsión
+      float rDist = distortion * (1.0 + u_chromatic * 0.06);
+      float gDist = distortion;
+      float bDist = distortion * (1.0 - u_chromatic * 0.04);
+
+      vec2 rUV = center + delta * rDist * scaleCompensation;
+      vec2 gUV = center + delta * gDist * scaleCompensation;
+      vec2 bUV = center + delta * bDist * scaleCompensation;
+
+      float r = texture2D(u_video, rUV).r;
+      float g = texture2D(u_video, gUV).g;
+      float b = texture2D(u_video, bUV).b;
+
+      // Vignetting oscuro en los bordes
+      float vignette = 1.0 - smoothstep(0.45, 0.85, dist);
+      vignette = mix(0.3, 1.0, vignette);
+
+      // Atenuación en bordes para ocultar UVs fuera de rango
+      float edgeFade = 1.0 - smoothstep(0.4, 0.5, abs(uv.x - 0.5));
+      edgeFade *= 1.0 - smoothstep(0.4, 0.5, abs(uv.y - 0.5));
+
+      vec3 color = vec3(r, g, b) * vignette;
+
+      gl_FragColor = vec4(color, 1.0);
+    }
+  `;
+
+  // ====== WEBGL SETUP ======
+  function createShader(gl, type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  function createProgram(gl, vs, fs) {
+    const program = gl.createProgram();
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error('Program link error:', gl.getProgramInfoLog(program));
+      gl.deleteProgram(program);
+      return null;
+    }
+    return program;
+  }
+
+  function initWebGL(canvas) {
+    const gl = canvas.getContext('webgl', {
+      alpha: false,
+      antialias: false,
+      preserveDrawingBuffer: false
+    });
+    if (!gl) {
+      console.error('WebGL not supported');
+      return null;
+    }
+
+    const vs = createShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
+    const fs = createShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
+    const program = createProgram(gl, vs, fs);
+
+    // Quad de pantalla completa
+    const positions = new Float32Array([
+      -1, -1,  1, -1,  -1, 1,
+      -1,  1,  1, -1,   1, 1
+    ]);
+    const texCoords = new Float32Array([
+      0, 1,  1, 1,  0, 0,
+      0, 0,  1, 1,  1, 0
+    ]);
+
+    const posBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+    const texBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, texCoords, gl.STATIC_DRAW);
+
+    const positionLoc = gl.getAttribLocation(program, 'a_position');
+    const texCoordLoc = gl.getAttribLocation(program, 'a_texCoord');
+
+    const videoTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, videoTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    const uVideoLoc = gl.getUniformLocation(program, 'u_video');
+    const uBarrelLoc = gl.getUniformLocation(program, 'u_barrelPower');
+    const uChromaticLoc = gl.getUniformLocation(program, 'u_chromatic');
+
+    gl.useProgram(program);
+    gl.uniform1i(uVideoLoc, 0);
+
+    return {
+      gl, program, posBuffer, texBuffer,
+      positionLoc, texCoordLoc,
+      videoTexture,
+      uBarrelLoc, uChromaticLoc
+    };
+  }
+
+  function resizeCanvasToDisplay(canvas) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.getBoundingClientRect();
+    const w = Math.round(rect.width * dpr);
+    const h = Math.round(rect.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+  }
+
+  function renderEye(webglObj) {
+    const { gl, program, posBuffer, texBuffer, positionLoc, texCoordLoc, videoTexture, uBarrelLoc, uChromaticLoc } = webglObj;
+
+    resizeCanvasToDisplay(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // Actualizar textura de video
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, videoTexture);
+    if (videoSource.readyState >= videoSource.HAVE_CURRENT_DATA) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, videoSource);
+    }
+
+    // Geometry
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
+    gl.enableVertexAttribArray(positionLoc);
+    gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer);
+    gl.enableVertexAttribArray(texCoordLoc);
+    gl.vertexAttribPointer(texCoordLoc, 2, gl.FLOAT, false, 0, 0);
+
+    // Uniforms
+    gl.uniform1f(uBarrelLoc, 0.28);
+    gl.uniform1f(uChromaticLoc, 1.0);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+
+  function renderLoop(webglL, webglR) {
+    renderEye(webglL);
+    renderEye(webglR);
+    animationId = requestAnimationFrame(() => renderLoop(webglL, webglR));
+  }
+
+  // ====== QUALITY UTILS ======
   function getAdvancedConstraints(base) {
     return {
       ...base,
@@ -479,6 +626,19 @@
     return base;
   }
 
+  // ====== INIT WEBGL ======
+  let webglL = null;
+  let webglR = null;
+
+  function initRenderers() {
+    webglL = initWebGL(canvasL);
+    webglR = initWebGL(canvasR);
+    if (webglL && webglR) {
+      renderLoop(webglL, webglR);
+    }
+  }
+
+  // ====== CAMERA CONTROL ======
   async function startCamera() {
     startBtn.classList.add('hidden');
     const constraints = await buildBestVideoConstraints('environment', true);
@@ -502,9 +662,12 @@
         }
       }
     }
-    videoL.srcObject = stream;
-    videoR.srcObject = stream;
-    try { await videoL.play(); await videoR.play(); } catch (e) { }
+    videoSource.srcObject = stream;
+    try { await videoSource.play(); } catch (e) { }
+
+    // Iniciar WebGL renderers
+    initRenderers();
+
     await listCameras();
     if (videoDevices.length > 1) camSwitch.classList.add('active');
     showCamInfo(videoDevices[currentCamIndex]?.label);
@@ -536,6 +699,8 @@
     currentCamIndex = (currentCamIndex + 1) % videoDevices.length;
     const device = videoDevices[currentCamIndex];
     if (stream) stream.getTracks().forEach(t => t.stop());
+    if (animationId) cancelAnimationFrame(animationId);
+
     const constraints = await buildBestVideoConstraints(device.deviceId, false);
     try {
       stream = await navigator.mediaDevices.getUserMedia({ video: constraints, audio: false });
@@ -557,12 +722,15 @@
         }
       }
     }
-    videoL.srcObject = stream;
-    videoR.srcObject = stream;
-    try { await videoL.play(); await videoR.play(); } catch (e) { }
+    videoSource.srcObject = stream;
+    try { await videoSource.play(); } catch (e) { }
+
+    // Reiniciar renderers
+    initRenderers();
     showCamInfo(device.label);
   }
 
+  // ====== INFO DISPLAY ======
   function showCamInfo(rawLabel) {
     let display = (rawLabel || `Cámara ${currentCamIndex + 1}`)
       .replace(/\(.*\)/g, '')
@@ -606,7 +774,9 @@
     errorMsg.classList.add('active');
   }
 
+  // ====== CLEANUP ======
   window.addEventListener('beforeunload', () => {
+    if (animationId) cancelAnimationFrame(animationId);
     if (stream) stream.getTracks().forEach(track => track.stop());
   });
   document.addEventListener('gesturestart', e => e.preventDefault());
