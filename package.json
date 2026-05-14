@@ -1,0 +1,15 @@
+{
+  "name": "deportes-cloud",
+  "version": "1.0.0",
+  "description": "Agenda deportiva con streams HLS",
+  "scripts": {
+    "scrape:partidos": "node scripts/scrape-partidos.js",
+    "scrape:escudos": "node scripts/scrape-escudos.js",
+    "extract:m3u8": "node scripts/extract-m3u8.js",
+    "build": "node scripts/build.js",
+    "scrape:all": "npm run scrape:partidos && npm run scrape:escudos && npm run extract:m3u8 && npm run build"
+  },
+  "dependencies": {
+    "playwright": "^1.44.0"
+  }
+}
