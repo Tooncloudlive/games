@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ToonCloud Deportes</title>
+<!-- Build: 2026-05-14 23:49 | Events: 10 | Logos: 7 | Streams: 10 -->
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ToonCloud">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<link rel="icon" type="image/png" href="https://i.imgur.com/XAHG8BW.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/XAHG8BW.png">
+<base target="_blank">
+
+<style>
+/* =====================================================
+   APPLE SPORTS / iOS MODERN DESIGN SYSTEM
+   Liquid Glass + Dynamic Team Gradients
+   ===================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  /* iOS System Colors */
+  --ios-bg: #000000;
+  --ios-surface: rgba(28, 28, 30, 0.60);
+  --ios-surface-solid: #1c1c1e;
+  --ios-surface-hover: rgba(44, 44, 46, 0.72);
+  --ios-border: rgba(255, 255, 255, 0.08);
+  --ios-border-hover: rgba(255, 255, 255, 0.14);
+  --ios-text-primary: #ffffff;
+  --ios-text-secondary: rgba(255, 255, 255, 0.55);
+  --ios-text-tertiary: rgba(255, 255, 255, 0.35);
+  --ios-accent: #0a84ff;
+  --ios-success: #30d158;
+  --ios-warning: #ff9f0a;
+  --ios-danger: #ff453a;
+  --ios-separator: rgba(255, 255, 255, 0.06);
+  
+  /* Liquid Glass */
+  --liquid-bg: rgba(255, 255, 255, 0.01);
+  --liquid-border: rgba(255, 255, 255, 0.12);
+  --liquid-border-inner: rgba(255, 255, 255, 0.06);
+  --liquid-highlight: rgba(255, 255, 255, 0.08);
+  --liquid-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 0.5px rgba(255, 255, 255, 0.08);
+  --liquid-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  
+  /* Typography Scale */
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-full: 9999px;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+  background: var(--ios-bg);
+  color: var(--ios-text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  line-height: 1.4;
+}
+
+/* =====================================================
+   AMBIENT BACKGROUND - Subtle dynamic mesh
+   ===================================================== */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ambient-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(10, 132, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 75%, rgba(175, 82, 222, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(48, 209, 88, 0.03) 0%, transparent 60%);
+  animation: ambient-drift 25s ease-in-out infinite;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.ambient-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(10, 132, 255, 0.25) 0%, transparent 70%);
+  top: 5%;
+  left: -15%;
+  animation: float-orb 12s ease-in-out infinite;
+}
+
+.ambient-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(175, 82, 222, 0.20) 0%, transparent 70%);
+  bottom: 10%;
+  right: -10%;
+  animation: float-orb 15s ease-in-out infinite reverse;
+}
+
+.ambient-orb-3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(48, 209, 88, 0.12) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float-orb 18s ease-in-out infinite;
+}
+
+@keyframes ambient-drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(1.5%, 1%) rotate(0.5deg); }
+  66% { transform: translate(-1%, 0.5%) rotate(-0.5deg); }
+}
+
+@keyframes float-orb {
+  0%, 100% { transform: translateY(0) scale(1); }
+  33% { transform: translateY(-8px) scale(1.02); }
+  66% { transform: translateY(4px) scale(0.98); }
+}
+
+/* =====================================================
+   LAYOUT
+   ===================================================== */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 88px var(--space-4) var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 96px var(--space-6) var(--space-8);
+  }
+}
+
+/* =====================================================
+   NAVIGATION BAR - iOS Style
+   ===================================================== */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  width: 100vw;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 0.5px solid var(--ios-separator);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  nav {
+    padding: 12px 24px;
+  }
+}
+
+.logo-container img {
+  height: 32px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  filter: drop-shadow(0 0 8px rgba(10, 132, 255, 0.3));
+}
+
+.logo-container img:hover {
+  opacity: 0.85;
+}
+
+.logo-container img:active {
+  transform: scale(0.96);
+}
+
+.nav-right {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.nav-search {
+  background: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid var(--ios-border);
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  color: var(--ios-text-primary);
+  outline: none;
+  backdrop-filter: blur(12px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  flex: 1;
+  max-width: 220px;
+  min-width: 110px;
+  letter-spacing: -0.01em;
+}
+
+.nav-search:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(10, 132, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+}
+
+.nav-search::placeholder {
+  color: var(--ios-text-tertiary);
+}
+
+/* Old header hidden */
+header {
+  display: none !important;
+}
+
+/* =====================================================
+   STATS BAR - Compact iOS Pills
+   ===================================================== */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.stats-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--liquid-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 0.5px solid var(--liquid-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ios-text-secondary);
+  box-shadow: var(--liquid-shadow);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ios-success);
+  animation: pulse-ios 2s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(48, 209, 88, 0.4);
+}
+
+.blink-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ios-warning);
+  animation: pulse-ios 2s ease-in-out infinite 0.5s;
+}
+
+@keyframes pulse-ios {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.65; }
+}
+
+/* =====================================================
+   SEARCH - iOS Style
+   ===================================================== */
+.search-container {
+  position: relative;
+  margin-bottom: var(--space-5);
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ios-text-tertiary);
+  font-size: var(--text-sm);
+  pointer-events: none;
+}
+
+.search {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--ios-border);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--ios-text-primary);
+  font-size: var(--text-base);
+  font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.01em;
+}
+
+.search::placeholder {
+  color: var(--ios-text-tertiary);
+}
+
+.search:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(10, 132, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.12);
+}
+
+/* =====================================================
+   BANNER
+   ===================================================== */
+.banner-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-5);
+}
+
+.banner-container a {
+  display: block;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.banner-container a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.banner-container a:active {
+  transform: scale(0.98);
+}
+
+.banner-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-md);
+}
+
+/* =====================================================
+   SECTION HEADER - Clean iOS Style
+   ===================================================== */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  padding: 0 var(--space-1);
+}
+
+.section-title {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ios-text-tertiary);
+  white-space: nowrap;
+}
+
+.section-line {
+  flex: 1;
+  height: 0.5px;
+  background: linear-gradient(90deg, var(--ios-separator) 0%, transparent 100%);
+}
+
+/* =====================================================
+   APPLE SPORTS MATCH CARD - Liquid Glass + Team Gradients
+   ===================================================== */
+.glass-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  margin-bottom: 10px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible;
+  animation: card-enter 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 1;
+}
+
+.glass-card.dropdown-open {
+  z-index: 10;
+}
+
+/* Liquid Glass Base Layer */
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.01) 30%,
+      rgba(255, 255, 255, 0.01) 70%,
+      rgba(255, 255, 255, 0.04) 100%);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Inner highlight edge */
+.glass-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 0.8px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.06) 20%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0.03) 80%,
+    rgba(255, 255, 255, 0.10) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Team Color Gradient Background Layer */
+.glass-card .card-gradient-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.glass-card .card-gradient-bg.loaded {
+  opacity: 1;
+}
+
+/* Live indicator - left edge glow */
+.glass-card.live::before {
+  background:
+    linear-gradient(180deg,
+      rgba(48, 209, 88, 0.10) 0%,
+      rgba(255, 255, 255, 0.01) 30%,
+      rgba(255, 255, 255, 0.01) 70%,
+      rgba(48, 209, 88, 0.06) 100%);
+}
+
+/* Hover state */
+.glass-card:hover {
+  transform: translateY(-2px) scale(1.005);
+  box-shadow: var(--liquid-shadow-hover);
+}
+
+.glass-card:hover::before {
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.02) 30%,
+      rgba(255, 255, 255, 0.02) 70%,
+      rgba(255, 255, 255, 0.06) 100%);
+}
+
+.glass-card.live:hover::before {
+  background:
+    linear-gradient(180deg,
+      rgba(48, 209, 88, 0.14) 0%,
+      rgba(255, 255, 255, 0.02) 30%,
+      rgba(255, 255, 255, 0.02) 70%,
+      rgba(48, 209, 88, 0.10) 100%);
+}
+
+/* Card removal animation */
+.glass-card.removing {
+  animation: card-exit 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+  overflow: hidden;
+}
+
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes card-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); height: 0; padding: 0; margin: 0; overflow: hidden; }
+}
+
+/* =====================================================
+   CARD CONTENT - Apple Sports Horizontal Layout
+   ===================================================== */
+.card-content {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-4) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 480px) {
+  .card-content {
+    padding: var(--space-4) var(--space-5);
+  }
+}
+
+/* League label row */
+.card-league-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.league-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ios-text-tertiary);
+  border-radius: var(--radius-full);
+  border: 0.5px solid var(--ios-border);
+}
+
+/* Match Row - Horizontal: Home | Center | Away */
+.match-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 56px;
+}
+
+/* Team Side (Home or Away) */
+.team-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.team-side.home {
+  align-items: center;
+}
+
+.team-side.away {
+  align-items: center;
+}
+
+.team-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: var(--space-1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.25s ease;
+}
+
+.glass-card:hover .team-logo {
+  transform: scale(1.08);
+}
+
+.team-logo-placeholder {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-logo-placeholder::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.team-name {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ios-text-secondary);
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* Center Column - Time & Status */
+.match-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.match-time {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--ios-text-primary);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.match-center .status-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-live-center {
+  background: rgba(48, 209, 88, 0.12);
+  color: var(--ios-success);
+  border: 0.5px solid rgba(48, 209, 88, 0.2);
+}
+
+.status-upcoming-center {
+  background: rgba(255, 159, 10, 0.08);
+  color: var(--ios-warning);
+  border: 0.5px solid rgba(255, 159, 10, 0.15);
+}
+
+/* VS Divider for upcoming */
+.vs-divider {
+  font-size: var(--text-xs);
+  font-weight: 800;
+  color: var(--ios-text-tertiary);
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+}
+
+/* =====================================================
+   CHANNEL SELECTOR - Inline iOS Style
+   ===================================================== */
+.channel-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 0.5px solid var(--ios-separator);
+  position: relative;
+  z-index: 2;
+}
+
+.channel-selector {
+  position: relative;
+}
+
+.channel-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid var(--ios-border);
+  border-radius: var(--radius-full);
+  color: var(--ios-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+}
+
+.channel-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--ios-border-hover);
+}
+
+.channel-btn:active {
+  transform: scale(0.96);
+}
+
+.chevron {
+  font-size: 0.5rem;
+  transition: transform 0.2s ease;
+  opacity: 0.6;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.channel-dropdown {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100% + 6px);
+  min-width: 170px;
+  background: rgba(40, 40, 44, 0.95);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 6px;
+  z-index: 50;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  animation: dropdown-enter 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes dropdown-enter {
+  from { opacity: 0; transform: translateX(-50%) translateY(-4px) scale(0.96); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+.channel-option {
+  display: block;
+  width: 100%;
+  padding: 9px 14px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--ios-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  letter-spacing: -0.01em;
+}
+
+.channel-option:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ios-text-primary);
+}
+
+.channel-option.active {
+  background: rgba(10, 132, 255, 0.12);
+  color: var(--ios-accent);
+  font-weight: 600;
+}
+
+.single-channel {
+  font-size: var(--text-xs);
+  color: var(--ios-text-tertiary);
+  font-weight: 500;
+}
+
+/* Watch Button */
+.btn-watch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 18px;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  font-family: inherit;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.btn-watch.enabled {
+  background: linear-gradient(135deg, #0a84ff, #0066d4);
+  color: white;
+  box-shadow: 0 2px 12px rgba(10, 132, 255, 0.3);
+}
+
+.btn-watch.enabled:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(10, 132, 255, 0.45);
+}
+
+.btn-watch.enabled:active {
+  transform: scale(0.96);
+  box-shadow: 0 1px 6px rgba(10, 132, 255, 0.3);
+}
+
+.btn-watch.disabled {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ios-text-tertiary);
+  border: 0.5px solid var(--ios-border);
+  cursor: default;
+}
+
+/* =====================================================
+   PLAYER OVERLAY - Immersive iOS Style
+   ===================================================== */
+.player-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  z-index: 1000;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  animation: fade-in 0.3s ease;
+}
+
+.player-overlay.active {
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 0.5px solid var(--ios-separator);
+  flex-shrink: 0;
+}
+
+.player-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ios-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.player-title-icon {
+  color: var(--ios-accent);
+  font-size: var(--text-base);
+}
+
+.btn-close {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-family: inherit;
+  background: rgba(255, 69, 58, 0.12);
+  color: var(--ios-danger);
+  border: 0.5px solid rgba(255, 69, 58, 0.2);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+}
+
+.btn-close:hover {
+  background: rgba(255, 69, 58, 0.2);
+}
+
+.btn-close:active {
+  transform: scale(0.95);
+}
+
+.player-wrapper {
+  flex: 1;
+  background: #000;
+  overflow: hidden;
+  position: relative;
+}
+
+#video-player {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #000;
+  display: block;
+}
+
+.video-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #000;
+  z-index: 5;
+  transition: opacity 0.3s ease;
+}
+
+.video-loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.video-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--ios-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.video-loading-text {
+  font-size: var(--text-sm);
+  color: var(--ios-text-secondary);
+  font-weight: 500;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.video-error {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 6;
+  padding: 24px;
+  text-align: center;
+}
+
+.video-error.active {
+  display: flex;
+}
+
+.video-error-icon {
+  font-size: 2rem;
+  opacity: 0.4;
+}
+
+.video-error-text {
+  font-size: var(--text-sm);
+  color: var(--ios-text-secondary);
+  font-weight: 500;
+}
+
+.video-error-subtext {
+  font-size: var(--text-xs);
+  color: var(--ios-text-tertiary);
+}
+
+.btn-retry {
+  margin-top: 8px;
+  padding: 8px 18px;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  font-family: inherit;
+  background: linear-gradient(135deg, #0a84ff, #0066d4);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-retry:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(10, 132, 255, 0.45);
+}
+
+.btn-retry:active {
+  transform: scale(0.96);
+}
+
+/* =====================================================
+   EMPTY STATE
+   ===================================================== */
+.empty-state {
+  text-align: center;
+  padding: 56px var(--space-5);
+  background: var(--liquid-bg);
+  backdrop-filter: blur(20px);
+  border: 0.5px solid var(--liquid-border);
+  border-radius: var(--radius-lg);
+  animation: scale-in 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--liquid-shadow);
+}
+
+.empty-state-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-3);
+  opacity: 0.25;
+}
+
+.empty-state-text {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--ios-text-secondary);
+  letter-spacing: -0.02em;
+}
+
+.empty-state-subtext {
+  font-size: var(--text-sm);
+  color: var(--ios-text-tertiary);
+  margin-top: var(--space-1);
+  letter-spacing: -0.01em;
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* =====================================================
+   DISCLAIMER - Minimal
+   ===================================================== */
+.disclaimer {
+  text-align: center;
+  padding: var(--space-4) var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.disclaimer .subtitle {
+  color: var(--ios-text-tertiary);
+  font-size: 0.75rem;
+  max-width: 540px;
+  margin: 0 auto 4px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.disclaimer .copyright {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+}
+
+/* =====================================================
+   SCROLLBAR - Minimal
+   ===================================================== */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =====================================================
+   UTILITY
+   ===================================================== */
+.hidden {
+  display: none !important;
+}
+
+/* =====================================================
+   RESPONSIVE - Mobile First
+   ===================================================== */
+@media (max-width: 480px) {
+  .container {
+    padding: 80px var(--space-3) var(--space-4);
+  }
+  
+  .match-row {
+    gap: var(--space-2);
+    min-height: 52px;
+  }
+  
+  .team-logo,
+  .team-logo-placeholder {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .team-name {
+    font-size: 0.625rem;
+  }
+  
+  .match-time {
+    font-size: var(--text-lg);
+  }
+  
+  .match-center {
+    min-width: 68px;
+    gap: 4px;
+  }
+  
+  .card-content {
+    padding: var(--space-3) var(--space-3);
+  }
+  
+  .channel-area {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  
+  .disclaimer .subtitle {
+    font-size: 0.6875rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+  
+  .team-logo,
+  .team-logo-placeholder {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .team-name {
+    font-size: var(--text-sm);
+  }
+  
+  .match-time {
+    font-size: 1.375rem;
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .ambient-orb,
+  .ambient-bg::before {
+    animation: none !important;
+  }
+}
+</style>
+<base target="_blank">
+<base target="_blank">
+</head>
+
+<body>
+
+<!-- Ambient Background -->
+<div class="ambient-bg">
+  <div class="ambient-orb ambient-orb-1"></div>
+  <div class="ambient-orb ambient-orb-2"></div>
+  <div class="ambient-orb ambient-orb-3"></div>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <div class="logo-container">
+    <img src="https://i.imgur.com/XAHG8BW.png" alt="ToonCloud" onclick="location.reload()">
+  </div>
+  <div class="nav-right">
+    <input type="text" id="nav-search" class="nav-search" placeholder="Buscar partidos..." oninput="filterEvents(this.value)">
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p class="subtitle">Este sitio no aloja ni transmite contenido propio. Todo el material proviene de fuentes publicas externas. No tenemos control ni responsabilidad sobre dicho contenido ni sobre los enlaces compartidos.</p>
+    <p class="copyright">Larvas S.A &copy;</p>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stats-pill">
+      <span class="pulse-dot"></span>
+      <span id="live-count">0 EN VIVO</span>
+    </div>
+    <div class="stats-pill">
+      <span class="blink-dot"></span>
+      <span id="upcoming-count">0 PROXIMOS</span>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-container">
+    <span class="search-icon">&#128269;</span>
+    <input class="search" placeholder="Buscar partidos, equipos, ligas..." oninput="filterEvents(this.value)">
+  </div>
+
+  <!-- Banner -->
+  <div class="banner-container">
+    <a href="https://1xlite-87822.bar/es?tag=d_5378140m_99260c_" target="_blank" rel="noopener noreferrer">
+      <img src="Media99260__WEEKEND-BOOSTER_970x90.gif" alt="1xBet Weekend Booster" class="banner-img">
+    </a>
+  </div>
+
+  <!-- Section Header -->
+  <div class="section-header">
+    <span class="section-title">Programacion</span>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- Events Container -->
+  <div id="events"></div>
+</div>
+
+<!-- Player Overlay -->
+<div class="player-overlay" id="player">
+  <div class="player-header">
+    <div class="player-title">
+      <span class="player-title-icon">&#128250;</span>
+      <span id="player-title-text">Reproductor en Vivo</span>
+    </div>
+    <button class="btn-close" onclick="closePlayer()">
+      <span>&#10005;</span>
+      <span>Cerrar</span>
+    </button>
+  </div>
+  <div class="player-wrapper" id="player-wrapper">
+    <div class="video-loading" id="video-loading">
+      <div class="video-loading-spinner"></div>
+      <span class="video-loading-text">Cargando stream...</span>
+    </div>
+    <div class="video-error" id="video-error">
+      <div class="video-error-icon">&#128683;</div>
+      <span class="video-error-text">No se pudo cargar el stream</span>
+      <span class="video-error-subtext">El enlace puede no estar disponible o requiere autenticacion</span>
+      <button class="btn-retry" onclick="retryStream()">Reintentar</button>
+    </div>
+    <video id="video-player" playsinline controls preload="auto"></video>
+  </div>
+</div>
+
+<script>
+// =====================================================
+// CONFIGURACION DE ESCUDOS - EDITA AQUI TUS PARTIDOS
+// =====================================================
+// Agrega o edita partidos con sus escudos aqui.
+// El formato es: { match: "Equipo Local vs Equipo Visitante", homeLogo: "URL_ESCUDO_LOCAL", awayLogo: "URL_ESCUDO_VISITANTE" }
+// Si no quieres escudo para un equipo, deja el campo vacio: ""
+
+const matchesLogos = [
+  { match: "Confiança vs Grêmio", homeLogo: "https://static.flashscore.com/res/image/data/KIpOFre5-42i02OW9.png", awayLogo: "https://static.flashscore.com/res/image/data/QPdJscAr-tQsU6dGl.png" },
+  { match: "Atlético Goianiense vs Athletico-PR", homeLogo: "https://static.flashscore.com/res/image/data/WGHITlhl-2eGLPjs8.png", awayLogo: "https://static.flashscore.com/res/image/data/SdnmINcM-QaMaOfUh.png" },
+  { match: "Corinthians vs Barra", homeLogo: "https://static.flashscore.com/res/image/data/lY91WW9r-6cpWH3kh.png", awayLogo: "https://static.flashscore.com/res/image/data/40fc5kyS-ltdTeHH7.png" },
+  { match: "CRB vs Fortaleza", homeLogo: "https://static.flashscore.com/res/image/data/fcXF2AYA-CvmgYbeE.png", awayLogo: "https://static.flashscore.com/res/image/data/2iWbipDr-I1V0sj5p.png" },
+  { match: "Cubs vs Braves", homeLogo: "https://static.flashscore.com/res/image/data/nFvRbjHG-MyFeHWzn.png", awayLogo: "https://static.flashscore.com/res/image/data/IPmhSoEa-hvtJM6zJ.png" },
+  { match: "Vitória vs Flamengo", homeLogo: "https://static.flashscore.com/res/image/data/EglYBtxS-QwRlGht5.png", awayLogo: "https://static.flashscore.com/res/image/data/6ZhQLSDa-4O6MjxPn.png" },
+  { match: "Pachuca vs Pumas UNAM", homeLogo: "https://static.flashscore.com/res/image/data/x4yMKjh5-zFZbB1JF.png", awayLogo: "https://static.flashscore.com/res/image/data/2mlyLKEG-pEQGCKC1.png" }
+];
+
+// =====================================================
+// DATOS DE EVENTOS
+// =====================================================
+const eventsData = [
+  { time: "19:00", match: "Copa do Brasil: Confiança vs Grêmio", link: "https://streamx550.com/global2.php?channel=amazon1" },
+  { time: "19:00", match: "Copa do Brasil: Atlético Goianiense vs Athletico-PR", link: "https://streamx550.com/global2.php?channel=premiere2" },
+  { time: "19:30", match: "Copa do Brasil: Corinthians vs Barra", link: "https://streamx550.com/global2.php?channel=amazon2" },
+  { time: "20:00", match: "Copa do Brasil: CRB vs Fortaleza", link: "https://streamx550.com/global2.php?channel=amazon3" },
+  { time: "20:15", match: "MLB: Cubs vs Braves", link: "https://streamx550.com/global2.php?channel=foxone2" },
+  { time: "21:30", match: "Copa do Brasil: Vitória vs Flamengo", link: "https://streamx550.com/global2.php?channel=dsportsplus" },
+  { time: "21:30", match: "Copa do Brasil: Vitória vs Flamengo", link: "https://streamx550.com/global2.php?channel=premiere1" },
+  { time: "21:30", match: "Copa do Brasil: Vitória vs Flamengo", link: "https://streamx550.com/global2.php?channel=espn4mx" },
+  { time: "22:00", match: "Liga MX: Pachuca vs Pumas UNAM", link: "https://streamx550.com/global2.php?channel=foxone1" },
+  { time: "22:00", match: "Liga MX: Pachuca vs Pumas UNAM", link: "https://streamx550.com/global2.php?channel=tudnus" }
+];
+
+// =====================================================
+// DATOS DE STREAMS M3U8
+// =====================================================
+const streamsData = [
+  { channel: "amazon1", source: "https://streamx550.com/global2.php?channel=amazon1", stream: "https://pr745.streamingtv339.com/global/amazon1/index.m3u8?token=381af6888001d849ac9c5a7b8f11231aeed0121f-e4-1778847451-1778793451&ip=64.236.153.162" },
+  { channel: "premiere2", source: "https://streamx550.com/global2.php?channel=premiere2", stream: "https://dp744.streamingtv339.com/global/premiere2/index.m3u8?token=fa13c9dfbd00a00a18d3bbcb15f92156b9263d99-31-1778847462-1778793462&ip=64.236.153.162" },
+  { channel: "amazon2", source: "https://streamx550.com/global2.php?channel=amazon2", stream: "https://pr745.streamingtv339.com/global/amazon2/index.m3u8?token=7e008a4a4cfe5c6251d246961a91f396474da7cd-52-1778847472-1778793472&ip=64.236.153.162" },
+  { channel: "amazon3", source: "https://streamx550.com/global2.php?channel=amazon3", stream: "https://dp744.streamingtv339.com/global/amazon3/index.m3u8?token=8055427a38f483b1304132aba7221a770501b0a6-3a-1778847482-1778793482&ip=64.236.153.162" },
+  { channel: "foxone2", source: "https://streamx550.com/global2.php?channel=foxone2", stream: "https://zb533.streamingtv339.com/global/foxone2/index.m3u8?token=662d7a9082d358cdddc0480e98174f4b0366d48b-b4-1778847491-1778793491&ip=64.236.153.162" },
+  { channel: "dsportsplus", source: "https://streamx550.com/global2.php?channel=dsportsplus", stream: "https://zb533.streamingtv339.com/global/dsportsplus/index.m3u8?token=5779df2a9bdf411d0404aaa61146697915b5ab7c-08-1778847500-1778793500&ip=64.236.153.162" },
+  { channel: "premiere1", source: "https://streamx550.com/global2.php?channel=premiere1", stream: "https://pr745.streamingtv339.com/global/premiere1/index.m3u8?token=709d490f01d33d6e94768f2848c1fe27a8423372-5e-1778847509-1778793509&ip=64.236.153.162" },
+  { channel: "espn4mx", source: "https://streamx550.com/global2.php?channel=espn4mx", stream: "https://pr745.streamingtv339.com/global/espn4mx/index.m3u8?token=ecb4f85517b533945aee807a30e9113f66e47d31-5d-1778847518-1778793518&ip=64.236.153.162" },
+  { channel: "foxone1", source: "https://streamx550.com/global2.php?channel=foxone1", stream: "https://dp744.streamingtv339.com/global/foxone1/index.m3u8?token=fb7dacf8a3a8f6d2f1ec6dad32bbb3fb3874c6f8-4f-1778847527-1778793527&ip=64.236.153.162" },
+  { channel: "tudnus", source: "https://streamx550.com/global2.php?channel=tudnus", stream: "https://dp744.streamingtv339.com/global/tudnus/index.m3u8?token=39de37ceea8fb4fedf7763ae2e43a4713c06567f-0d-1778847536-1778793536&ip=64.236.153.162" }
+];
+
+// =====================================================
+// DICCIONARIO DE MAPEO DE LIGAS
+// =====================================================
+// Agrega o edita entradas para renombrar ligas.
+// El formato es: "Nombre exacto extraido del campo match": "Nombre a mostrar"
+// Si una liga no esta en este diccionario, se mostrara su nombre original.
+
+const leagueMapping = {
+    "Liga Profesional": "Liga Profesional Argentina",
+    "Copa do Brasil": "Copa de Brasil",
+    "MLS": "Major League Soccer",
+    "NBA": "National Basketball Association"
+    // Agrega mas ligas aqui segun necesites
+};
+
+const channelNameMap = {
+  'disney1': 'Disney+ 1', 'disney2': 'Disney+ 2', 'disney3': 'Disney+ 3', 'disney4': 'Disney+ 4',
+  'disney5': 'Disney+ 5', 'disney6': 'Disney+ 6', 'disney7': 'Disney+ 7', 'disney8': 'Disney+ 8',
+  'max1': 'Max 1', 'max2': 'Max 2', 'max3': 'Max 3', 'espn': 'ESPN', 'espn2': 'ESPN 2', 'espn3': 'ESPN 3',
+  'espn5': 'ESPN 5', 'espnmx': 'ESPN MX', 'espnpremium': 'ESPN Premium', 'tudnus': 'TUDN',
+  'fox1ar': 'Fox Sports 1 AR', 'fox2ar': 'Fox Sports 2 AR', 'foxdeportes': 'Fox Deportes',
+  'paramount1': 'Paramount+ 1', 'paramount2': 'Paramount+ 2', 'winplus': 'Win Sports+',
+  'winplus2': 'Win Sports+ 2', 'fanatiz1': 'Fanatiz 1', 'fanatiz2': 'Fanatiz 2', 'fanatiz3': 'Fanatiz 3',
+  'tyc': 'TyC Sports', 'tycint': 'TyC Sports Int', 'clarosports': 'Claro Sports',
+  'telefe': 'Telefe', 'daznf1': 'DAZN F1', 'sportv1': 'Sportv 1', 'sportv3': 'Sportv 3'
+};
+
+// Estado global
+let groupedEventsCache = [];
+let openDropdowns = new Set();
+
+// =====================================================
+// FUNCIONES DE ESCUDOS
+// =====================================================
+
+function normalizeText(text) {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function similarity(str1, str2) {
+  const s1 = normalizeText(str1);
+  const s2 = normalizeText(str2);
+  
+  if (s1 === s2) return 1;
+  if (s1.includes(s2) || s2.includes(s1)) return 0.9;
+  
+  const words1 = s1.split(' ').filter(w => w.length > 2);
+  const words2 = s2.split(' ').filter(w => w.length > 2);
+  
+  if (words1.length === 0 || words2.length === 0) return 0;
+  
+  let matches = 0;
+  for (const w1 of words1) {
+    for (const w2 of words2) {
+      if (w1 === w2 || w1.includes(w2) || w2.includes(w1)) {
+        matches++;
+        break;
+      }
+    }
+  }
+  
+  return matches / Math.max(words1.length, words2.length);
+}
+
+function extractTeamNames(matchText) {
+  const withoutCompetition = matchText.replace(/^[^:]+:\s*/, '');
+  const vsMatch = withoutCompetition.match(/(.+?)\s+vs\s+(.+)/i);
+  if (vsMatch) {
+    return { 
+      home: vsMatch[1].trim(), 
+      away: vsMatch[2].trim(),
+      full: withoutCompetition.trim()
+    };
+  }
+  return { home: withoutCompetition.trim(), away: null, full: withoutCompetition.trim() };
+}
+
+function getLogosForMatch(matchText) {
+  const eventTeams = extractTeamNames(matchText);
+  let bestMatch = null;
+  let bestScore = 0;
+  
+  for (const item of matchesLogos) {
+    const configTeams = extractTeamNames(item.match);
+    
+    const homeScore = similarity(eventTeams.home, configTeams.home);
+    
+    const awayScore = eventTeams.away && configTeams.away 
+      ? similarity(eventTeams.away, configTeams.away)
+      : 0.5;
+    
+    const totalScore = (homeScore + awayScore) / 2;
+    
+    if (homeScore > 0.6 && awayScore > 0.6 && totalScore > bestScore) {
+      bestScore = totalScore;
+      bestMatch = item;
+    }
+    
+    const fullSimilarity = similarity(eventTeams.full, configTeams.full);
+    if (fullSimilarity > 0.8 && fullSimilarity > bestScore) {
+      bestScore = fullSimilarity;
+      bestMatch = item;
+    }
+  }
+  
+  if (bestMatch) {
+    return { homeLogo: bestMatch.homeLogo, awayLogo: bestMatch.awayLogo };
+  }
+  
+  return { homeLogo: null, awayLogo: null };
+}
+
+function extractTeamsFromMatch(matchText) {
+  const withoutCompetition = matchText.replace(/^[^:]+:\s*/, '');
+  const vsMatch = withoutCompetition.match(/(.+?)\s+vs\s+(.+)/i);
+  if (vsMatch) {
+    return { team1: vsMatch[1].trim(), team2: vsMatch[2].trim() };
+  }
+  return { team1: withoutCompetition, team2: null };
+}
+
+// =====================================================
+// EXTRACCION DE COLORES DOMINANTES DE ESCUDOS
+// =====================================================
+
+// Cache de colores extraidos por URL de escudo
+const teamColorCache = new Map();
+
+function extractDominantColor(imageUrl, callback) {
+  if (teamColorCache.has(imageUrl)) {
+    callback(teamColorCache.get(imageUrl));
+    return;
+  }
+  
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() {
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 40;
+      canvas.height = 40;
+      ctx.drawImage(img, 0, 0, 40, 40);
+      
+      const imageData = ctx.getImageData(0, 0, 40, 40).data;
+      let r = 0, g = 0, b = 0, count = 0;
+      
+      // Sample every 4th pixel for performance
+      for (let i = 0; i < imageData.length; i += 16) {
+        const pr = imageData[i];
+        const pg = imageData[i + 1];
+        const pb = imageData[i + 2];
+        const pa = imageData[i + 3];
+        
+        // Skip transparent, white, black, and gray pixels
+        if (pa < 128) continue;
+        const brightness = (pr + pg + pb) / 3;
+        if (brightness > 240 || brightness < 15) continue;
+        if (Math.abs(pr - pg) < 15 && Math.abs(pg - pb) < 15 && Math.abs(pr - pb) < 15) continue;
+        
+        r += pr;
+        g += pg;
+        b += pb;
+        count++;
+      }
+      
+      if (count > 0) {
+        const color = { r: Math.round(r / count), g: Math.round(g / count), b: Math.round(b / count) };
+        teamColorCache.set(imageUrl, color);
+        callback(color);
+      } else {
+        teamColorCache.set(imageUrl, null);
+        callback(null);
+      }
+    } catch (e) {
+      teamColorCache.set(imageUrl, null);
+      callback(null);
+    }
+  };
+  img.onerror = function() {
+    teamColorCache.set(imageUrl, null);
+    callback(null);
+  };
+  img.src = imageUrl;
+}
+
+function applyTeamGradient(cardElement, homeLogoUrl, awayLogoUrl) {
+  if (!homeLogoUrl && !awayLogoUrl) return;
+  
+  let colorsExtracted = 0;
+  let homeColor = null;
+  let awayColor = null;
+  
+  function tryApply() {
+    if (colorsExtracted < 2) return;
+    
+    const gradEl = cardElement.querySelector('.card-gradient-bg');
+    if (!gradEl) return;
+    
+    const c1 = homeColor || { r: 10, g: 132, b: 255 };
+    const c2 = awayColor || { r: 175, g: 82, b: 222 };
+    
+    // Softer, more diffuse gradient - Apple Sports style
+    gradEl.style.background = `
+      radial-gradient(ellipse 90% 70% at 20% 50%,
+        rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.18) 0%,
+        transparent 70%),
+      radial-gradient(ellipse 90% 70% at 80% 50%,
+        rgba(${c2.r}, ${c2.g}, ${c2.b}, 0.14) 0%,
+        transparent 70%)
+    `;
+    gradEl.classList.add('loaded');
+  }
+  
+  if (homeLogoUrl) {
+    extractDominantColor(homeLogoUrl, function(color) {
+      homeColor = color;
+      colorsExtracted++;
+      tryApply();
+    });
+  } else {
+    colorsExtracted++;
+  }
+  
+  if (awayLogoUrl) {
+    extractDominantColor(awayLogoUrl, function(color) {
+      awayColor = color;
+      colorsExtracted++;
+      tryApply();
+    });
+  } else {
+    colorsExtracted++;
+  }
+}
+
+// =====================================================
+// GENERADOR HTML DE PARTIDO - Apple Sports Style
+// =====================================================
+
+function generateMatchHTML(matchText, cardElement) {
+  const { team1, team2 } = extractTeamsFromMatch(matchText);
+  const { homeLogo, awayLogo } = getLogosForMatch(matchText);
+  
+  // Apply team color gradient to card
+  if (cardElement && homeLogo && awayLogo) {
+    setTimeout(() => applyTeamGradient(cardElement, homeLogo, awayLogo), 50);
+  }
+  
+  const logo1HTML = homeLogo 
+    ? `<img src="${homeLogo}" alt="${team1}" class="team-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="team-logo-placeholder" style="display:none;"></div>`
+    : `<div class="team-logo-placeholder"></div>`;
+    
+  const logo2HTML = awayLogo 
+    ? `<img src="${awayLogo}" alt="${team2}" class="team-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="team-logo-placeholder" style="display:none;"></div>`
+    : `<div class="team-logo-placeholder"></div>`;
+  
+  return { team1, team2, logo1HTML, logo2HTML, homeLogo, awayLogo };
+}
+
+// =====================================================
+// FUNCIONES UTILITARIAS
+// =====================================================
+
+function getLeague(match) {
+  // Extraer el nombre de la liga: todo el texto que precede al primer ":"
+  const colonIndex = match.indexOf(':');
+  if (colonIndex === -1) return 'PARTIDO';
+  
+  const leagueName = match.substring(0, colonIndex).trim();
+  
+  // Verificar si existe en el diccionario de mapeo
+  // Si existe, devolver el nombre personalizado; si no, el nombre original
+  return leagueMapping[leagueName] || leagueName;
+}
+
+function getChannelFromLink(link) {
+  const match = link.match(/channel=([a-zA-Z0-9]+)/);
+  return match ? match[1] : null;
+}
+
+function formatChannelName(channel) {
+  return channelNameMap[channel] || channel.toUpperCase();
+}
+
+function groupEventsByMatch(events) {
+  const grouped = {};
+  events.forEach(ev => {
+    const key = `${ev.time}_${ev.match}`;
+    if (!grouped[key]) {
+      grouped[key] = { time: ev.time, match: ev.match, channels: [] };
+    }
+    const channel = getChannelFromLink(ev.link);
+    if (channel) {
+      grouped[key].channels.push({ name: channel, link: ev.link, displayName: formatChannelName(channel) });
+    }
+  });
+  Object.values(grouped).forEach(group => {
+    group.channels.sort((a, b) => a.displayName.localeCompare(b.displayName));
+  });
+  return Object.values(grouped);
+}
+
+function getEventDate(time) {
+  const [h, m] = time.split(":").map(Number);
+  const now = new Date();
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+
+  const diffHours = (d - now) / (1000 * 60 * 60);
+  const DAY_START = 4;
+
+  if (diffHours > 12 && now.getHours() < DAY_START && h >= 18) {
+    d.setDate(d.getDate() - 1);
+    return d;
+  }
+
+  if (diffHours < -12 && now.getHours() >= 18 && h < DAY_START) {
+    d.setDate(d.getDate() + 1);
+    return d;
+  }
+
+  if (now.getHours() < DAY_START && h < DAY_START && diffHours < 0) {
+    d.setDate(d.getDate() + 1);
+    return d;
+  }
+
+  return d;
+}
+
+function getStatus(eventTime) {
+  const now = new Date();
+  const start = getEventDate(eventTime);
+  const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+  if (now < start) return "PROXIMO";
+  if (now >= start && now <= end) return "EN VIVO";
+  return "FINALIZADO";
+}
+
+// =====================================================
+// RENDERIZADO - Apple Sports Cards
+// =====================================================
+
+function updateStats(list) {
+  let live = 0, upcoming = 0;
+  list.forEach(ev => {
+    const status = getStatus(ev.time);
+    if (status === "EN VIVO") live++;
+    else if (status === "PROXIMO") upcoming++;
+  });
+  document.getElementById("live-count").textContent = `${live} EN VIVO`;
+  document.getElementById("upcoming-count").textContent = `${upcoming} PROXIMOS`;
+}
+
+function toggleDropdown(matchId) {
+  const dropdown = document.getElementById(`dropdown-${matchId}`);
+  const chevron = document.getElementById(`chevron-${matchId}`);
+  const card = document.querySelector(`[data-match-id="${matchId}"]`);
+
+  // Close other dropdowns and remove their dropdown-open class
+  openDropdowns.forEach(id => {
+    if (id !== matchId) {
+      const otherDropdown = document.getElementById(`dropdown-${id}`);
+      const otherChevron = document.getElementById(`chevron-${id}`);
+      const otherCard = document.querySelector(`[data-match-id="${id}"]`);
+      if (otherDropdown) otherDropdown.classList.add('hidden');
+      if (otherChevron) otherChevron.classList.remove('open');
+      if (otherCard) otherCard.classList.remove('dropdown-open');
+    }
+  });
+  openDropdowns.clear();
+
+  if (dropdown.classList.contains('hidden')) {
+    dropdown.classList.remove('hidden');
+    chevron.classList.add('open');
+    if (card) card.classList.add('dropdown-open');
+    openDropdowns.add(matchId);
+  } else {
+    dropdown.classList.add('hidden');
+    chevron.classList.remove('open');
+    if (card) card.classList.remove('dropdown-open');
+  }
+}
+
+function selectChannel(matchId, link, name) {
+  const card = document.querySelector(`[data-match-id="${matchId}"]`);
+  card.dataset.selectedChannel = link;
+  const btn = document.getElementById(`channel-btn-${matchId}`);
+  btn.innerHTML = `<span>${name}</span><span class="chevron" id="chevron-${matchId}">&#9660;</span>`;
+  document.getElementById(`dropdown-${matchId}`).classList.add('hidden');
+  card.classList.remove('dropdown-open');
+  openDropdowns.delete(matchId);
+}
+
+function renderEvents(list = eventsData) {
+  const container = document.getElementById("events");
+  container.innerHTML = "";
+  
+  let grouped = groupEventsByMatch(list);
+  grouped = grouped.filter(ev => getStatus(ev.time) !== "FINALIZADO");
+  
+  groupedEventsCache = grouped;
+  updateStats(list);
+
+  if (groupedEventsCache.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">&#128269;</div>
+        <p class="empty-state-text">No se encontraron partidos</p>
+        <p class="empty-state-subtext">Intenta con otra busqueda</p>
+      </div>
+    `;
+    return;
+  }
+
+  groupedEventsCache.sort((a, b) => a.time.localeCompare(b.time));
+
+  groupedEventsCache.forEach((ev, index) => {
+    const status = getStatus(ev.time);
+    const isActive = status === "EN VIVO";
+    const league = getLeague(ev.match);
+    const hasMultipleChannels = ev.channels.length > 1;
+    const matchId = `${ev.time}-${ev.match.replace(/[^a-zA-Z0-9]/g, '-')}`;
+
+    const card = document.createElement("div");
+    card.className = `glass-card ${isActive ? 'live' : ''}`;
+    card.dataset.matchId = matchId;
+    card.dataset.time = ev.time;
+    card.dataset.selectedChannel = ev.channels[0]?.link || '';
+    card.style.animationDelay = `${index * 0.05}s`;
+
+    // Generate team logos and names (pass card element for gradient extraction)
+    const { team1, team2, logo1HTML, logo2HTML } = generateMatchHTML(ev.match, card);
+
+    // Build channel HTML
+    let channelHTML = '';
+    if (ev.channels.length > 0) {
+      if (hasMultipleChannels) {
+        channelHTML = `
+          <div class="channel-selector">
+            <button class="channel-btn" id="channel-btn-${matchId}" onclick="toggleDropdown('${matchId}')">
+              <span>${ev.channels[0].displayName}</span>
+              <span class="chevron" id="chevron-${matchId}">&#9660;</span>
+            </button>
+            <div class="channel-dropdown hidden" id="dropdown-${matchId}">
+              ${ev.channels.map(ch => `
+                <button class="channel-option ${ch.link === ev.channels[0].link ? 'active' : ''}" 
+                        onclick="selectChannel('${matchId}', '${ch.link}', '${ch.displayName}')">
+                  ${ch.displayName}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        channelHTML = `<span class="single-channel">${ev.channels[0].displayName}</span>`;
+      }
+    }
+
+    // Apple Sports style horizontal layout
+    card.innerHTML = `
+      <!-- Team color gradient background layer -->
+      <div class="card-gradient-bg"></div>
+      
+      <div class="card-content">
+        <!-- League Badge -->
+        <div class="card-league-row">
+          <span class="league-badge">${league}</span>
+        </div>
+        
+        <!-- Match Row: Home | Center | Away -->
+        <div class="match-row">
+          <!-- Home Team -->
+          <div class="team-side home">
+            ${logo1HTML}
+            <span class="team-name" title="${team1}">${team1}</span>
+          </div>
+          
+          <!-- Center: Time + Status -->
+          <div class="match-center">
+            <span class="match-time">${ev.time}</span>
+            <span class="status-badge ${isActive ? 'status-live-center' : 'status-upcoming-center'}">
+              ${isActive ? '<span class="pulse-dot"></span>' : ''}
+              <span>${status}</span>
+            </span>
+          </div>
+          
+          <!-- Away Team -->
+          <div class="team-side away">
+            ${logo2HTML}
+            <span class="team-name" title="${team2 || ''}">${team2 || ''}</span>
+          </div>
+        </div>
+        
+        <!-- Channel + Watch Button Row -->
+        <div class="channel-area">
+          ${channelHTML}
+          <button class="btn-watch ${isActive ? 'enabled' : 'disabled'}" 
+                  ${isActive ? `onclick="watchMatch('${matchId}')"` : ''}>
+            <span>${isActive ? '&#9654;' : '&#8987;'}</span>
+            <span>${isActive ? 'Ver' : 'Proximo'}</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+// =====================================================
+// HLS.JS INTEGRACION
+// =====================================================
+
+let hlsInstance = null;
+let currentStreamUrl = null;
+let currentMatchTitle = '';
+
+function getChannelFromLink(link) {
+  const match = link.match(/channel=([a-zA-Z0-9]+)/);
+  return match ? match[1] : null;
+}
+
+function resolveStreamUrl(link) {
+  const channel = getChannelFromLink(link);
+  if (!channel || !streamsData || !streamsData.length) return link;
+
+  // Buscar en streamsData el m3u8 para este canal
+  const found = streamsData.find(s => s.channel === channel);
+  if (found && found.stream) {
+    return found.stream;
+  }
+
+  // Fallback: si no hay m3u8 para este canal, usar el link original (iframe legacy)
+  return link;
+}
+
+function isM3U8(url) {
+  return url && (url.toLowerCase().includes('.m3u8') || url.toLowerCase().includes('application/x-mpegurl'));
+}
+
+function destroyHLS() {
+  if (hlsInstance) {
+    try {
+      hlsInstance.destroy();
+    } catch (_) {}
+    hlsInstance = null;
+  }
+  const video = document.getElementById('video-player');
+  if (video) {
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+  }
+}
+
+function showVideoLoading(show) {
+  const el = document.getElementById('video-loading');
+  if (!el) return;
+  if (show) el.classList.remove('hidden');
+  else el.classList.add('hidden');
+}
+
+function showVideoError(show) {
+  const el = document.getElementById('video-error');
+  if (!el) return;
+  if (show) el.classList.add('active');
+  else el.classList.remove('active');
+}
+
+function initHLS(streamUrl, matchTitle) {
+  currentStreamUrl = streamUrl;
+  currentMatchTitle = matchTitle;
+  const video = document.getElementById('video-player');
+
+  showVideoLoading(true);
+  showVideoError(false);
+
+  // Si no es m3u8, fallback a iframe (abrir en nueva pestana)
+  if (!isM3U8(streamUrl)) {
+    showVideoLoading(false);
+    closePlayer();
+    window.open(streamUrl, '_blank');
+    return;
+  }
+
+  destroyHLS();
+
+  if (Hls.isSupported()) {
+    hlsInstance = new Hls({
+      enableWorker: true,
+      lowLatencyMode: true,
+      backBufferLength: 90,
+      maxBufferLength: 30,
+      maxMaxBufferLength: 60,
+      liveSyncDurationCount: 3,
+      liveMaxLatencyDurationCount: 5,
+      manifestLoadingTimeOut: 10000,
+      manifestLoadingMaxRetry: 2,
+      levelLoadingTimeOut: 10000,
+      levelLoadingMaxRetry: 2,
+      fragLoadingTimeOut: 10000,
+      fragLoadingMaxRetry: 3,
+    });
+
+    hlsInstance.on(Hls.Events.MEDIA_ATTACHED, function () {
+      hlsInstance.loadSource(streamUrl);
+    });
+
+    hlsInstance.on(Hls.Events.MANIFEST_PARSED, function () {
+      showVideoLoading(false);
+      showVideoError(false);
+      video.play().catch(() => {
+        // Autoplay bloqueado, el usuario debe dar play manual
+      });
+    });
+
+    hlsInstance.on(Hls.Events.ERROR, function (event, data) {
+      console.warn('[HLS] Error:', data.type, data.details);
+
+      if (data.fatal) {
+        showVideoLoading(false);
+
+        switch (data.type) {
+          case Hls.ErrorTypes.NETWORK_ERROR:
+            console.log('[HLS] Error de red, intentando recuperar...');
+            showVideoError(true);
+            break;
+          case Hls.ErrorTypes.MEDIA_ERROR:
+            console.log('[HLS] Error de media, intentando recuperar...');
+            hlsInstance.recoverMediaError();
+            break;
+          default:
+            console.log('[HLS] Error fatal, no se puede recuperar');
+            showVideoError(true);
+            destroyHLS();
+            break;
+        }
+      }
+    });
+
+    hlsInstance.attachMedia(video);
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Safari native HLS
+    video.src = streamUrl;
+    video.addEventListener('loadedmetadata', function () {
+      showVideoLoading(false);
+      showVideoError(false);
+      video.play().catch(() => {});
+    });
+    video.addEventListener('error', function () {
+      showVideoLoading(false);
+      showVideoError(true);
+    });
+  } else {
+    showVideoLoading(false);
+    showVideoError(true);
+  }
+}
+
+function retryStream() {
+  if (currentStreamUrl) {
+    showVideoError(false);
+    initHLS(currentStreamUrl, currentMatchTitle);
+  }
+}
+
+// =====================================================
+// INTERACCION
+// =====================================================
+
+function watchMatch(matchId) {
+  const card = document.querySelector(`[data-match-id="${matchId}"]`);
+  if (!card) return;
+  const selectedLink = card.dataset.selectedChannel;
+  const matchText = card.querySelector('.match-row').textContent;
+  if (selectedLink) openPlayer(selectedLink, matchText);
+}
+
+function openPlayer(link, matchTitle) {
+  document.getElementById("player").classList.add("active");
+  document.getElementById("player-title-text").textContent = matchTitle;
+  document.body.style.overflow = "hidden";
+
+  // Resolver el stream m3u8 real
+  const streamUrl = resolveStreamUrl(link);
+  initHLS(streamUrl, matchTitle);
+}
+
+function closePlayer() {
+  document.getElementById("player").classList.remove("active");
+  destroyHLS();
+  showVideoLoading(false);
+  showVideoError(false);
+  document.body.style.overflow = "";
+}
+
+function filterEvents(text) {
+  const filtered = eventsData.filter(e => {
+    if (!e.match.toLowerCase().includes(text.toLowerCase())) return false;
+    return getStatus(e.time) !== "FINALIZADO";
+  });
+  renderEvents(filtered);
+}
+
+function updateStatuses() {
+  const cards = document.querySelectorAll('.glass-card');
+  let liveCount = 0, upcomingCount = 0;
+  cards.forEach(card => {
+    const time = card.dataset.time;
+    if (!time) return;
+    const status = getStatus(time);
+    
+    if (status === "FINALIZADO") {
+      card.classList.add('removing');
+      setTimeout(() => {
+        if (card.parentNode) card.remove();
+        const remaining = document.querySelectorAll('.glass-card:not(.removing)');
+        if (remaining.length === 0) {
+          const container = document.getElementById("events");
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">&#128269;</div>
+              <p class="empty-state-text">No hay partidos en curso</p>
+              <p class="empty-state-subtext">Vuelve mas tarde para ver nuevos eventos</p>
+            </div>
+          `;
+        }
+      }, 400);
+      return;
+    }
+    
+    const statusEl = card.querySelector('.match-center .status-badge');
+    const btn = card.querySelector('.btn-watch');
+    if (status === "EN VIVO") liveCount++;
+    else if (status === "PROXIMO") upcomingCount++;
+    
+    const currentStatusText = statusEl.querySelector('span:last-child').textContent;
+    if (currentStatusText !== status) {
+      statusEl.className = `status-badge ${status === 'EN VIVO' ? 'status-live-center' : 'status-upcoming-center'}`;
+      statusEl.innerHTML = `${status === 'EN VIVO' ? '<span class="pulse-dot"></span>' : ''}<span>${status}</span>`;
+      card.classList.remove('live');
+      if (status === 'EN VIVO') card.classList.add('live');
+      if (btn) {
+        const isActive = status === "EN VIVO";
+        btn.className = `btn-watch ${isActive ? 'enabled' : 'disabled'}`;
+        btn.onclick = isActive ? () => watchMatch(card.dataset.matchId) : null;
+        btn.innerHTML = `<span>${isActive ? '&#9654;' : '&#8987;'}</span><span>${isActive ? 'Ver' : 'Proximo'}</span>`;
+      }
+    }
+  });
+  document.getElementById("live-count").textContent = `${liveCount} EN VIVO`;
+  document.getElementById("upcoming-count").textContent = `${upcomingCount} PROXIMOS`;
+}
+
+// Event listeners
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.channel-selector')) {
+    openDropdowns.forEach(id => {
+      const dropdown = document.getElementById(`dropdown-${id}`);
+      const chevron = document.getElementById(`chevron-${id}`);
+      const card = document.querySelector(`[data-match-id="${id}"]`);
+      if (dropdown) dropdown.classList.add('hidden');
+      if (chevron) chevron.classList.remove('open');
+      if (card) card.classList.remove('dropdown-open');
+    });
+    openDropdowns.clear();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closePlayer();
+});
+
+// Inicializar
+renderEvents();
+setInterval(updateStatuses, 1000);
+</script>
+
+</body>
+</html>
