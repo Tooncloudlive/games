@@ -6,8 +6,10 @@
  * 2) Para cada link unico, abre con Playwright
  * 3) Escucha requests/responses de red
  * 4) Detecta URLs .m3u8 automaticamente
- * 5) Valida que el stream responde correctamente (HEAD)
- * 6) Genera data/streams.json con los streams validos
+ * 5) Prioriza streams finales sobre manifests intermedios (scoring inteligente)
+ * 6) Limpia parametros problematicos (ip= hardcodeado) mantiene token
+ * 7) Valida que el stream responda correctamente (HEAD)
+ * 8) Genera data/streams.json con los streams validos
  *
  * Reglas:
  * - Tolerante a fallos: un link fallido no bloquea los demas
@@ -15,6 +17,9 @@
  * - Reintentos limitados (max 2 por link)
  * - Deduplicacion por canal
  * - Si no hay cambios respecto al run anterior, no regenera
+ * - Prioriza tracks-v1a1/mono.m3u8 sobre index.m3u8 intermedio
+ * - Elimina ip= hardcodeado del runner de GitHub Actions
+ * - Mantiene token de autenticacion
  */
 
 const { chromium } = require('playwright');
@@ -47,6 +52,89 @@ const HLS_CONTENT_TYPES = [
   'application/octet-stream',
   'video/MP2T',
 ];
+
+/**
+ * Limpia parametros problematicos de una URL de stream:
+ * - Elimina ip=... (hardcodeado del runner, no sirve para el usuario final)
+ * - Mantiene token=... y otros parametros funcionales
+ * - Elimina duplicados
+ */
+function cleanStreamUrl(url) {
+  if (!url || typeof url !== 'string') return url;
+  try {
+    const urlObj = new URL(url);
+    const paramsToRemove = ['ip'];
+    for (const p of paramsToRemove) {
+      urlObj.searchParams.delete(p);
+    }
+    return urlObj.toString();
+  } catch {
+    // Si no se puede parsear, hacer limpieza manual
+    return url.replace(/[?&]ip=[^&]+/g, '').replace(/\?$/, '').replace(/&&+/g, '&').replace(/\?&/, '?');
+  }
+}
+
+/**
+ * Scoring inteligente para elegir el mejor stream:
+ * +100: tracks-v1a1 mono.m3u8 (stream final directo)
+ * +60:  otra variante tracks-N mono.m3u8
+ * +40:  cualquier mono.m3u8
+ * +30:  index.m3u8 con token
+ * +10:  cualquier .m3u8 valido
+ * +15:  tiene token de autenticacion
+ * -40:  contiene ip= (hardcodeado del runner, puede no funcionar para usuarios)
+ * -20:  es manifest /global/ generico sin variant especifica
+ * -10:  es index.m3u8 sin variantes (probable master manifest intermedio)
+ */
+function scoreCandidate(url) {
+  if (!url) return -Infinity;
+  const u = url.toLowerCase();
+  let score = 0;
+
+  // Prioridad alta: stream final directo (variante de reproduccion real)
+  if (u.includes('tracks-v1a1/mono.m3u8')) {
+    score += 100;
+  } else if (/tracks-v\d+a\d+\/mono\.m3u8/.test(u)) {
+    score += 60;
+  } else if (u.includes('mono.m3u8')) {
+    score += 40;
+  }
+
+  // Tiene token de autenticacion (bueno)
+  if (u.includes('token=')) {
+    score += 15;
+  }
+
+  // Penalizacion: ip hardcodeado del runner de GitHub Actions
+  if (u.includes('ip=')) {
+    score -= 40;
+  }
+
+  // Penalizacion: manifest intermedio generico
+  if (u.includes('/global/') && u.includes('index.m3u8') && !u.includes('tracks-')) {
+    score -= 20;
+  }
+
+  // Penalizacion menor: index.m3u8 generico sin variant
+  if (u.includes('index.m3u8') && !u.includes('tracks-') && !u.includes('mono')) {
+    score -= 10;
+  }
+
+  // Base: cualquier m3u8 valido
+  if (u.includes('.m3u8')) {
+    score += 10;
+  }
+
+  return score;
+}
+
+/**
+ * Ordena candidatos por scoring inteligente (mejor primero)
+ */
+function sortCandidatesByScore(urls) {
+  const unique = [...new Set(urls.map(u => cleanStreamUrl(u)))].filter(Boolean);
+  return unique.sort((a, b) => scoreCandidate(b) - scoreCandidate(a));
+}
 
 function ensureDir(filePath) {
   const dir = path.dirname(filePath);
@@ -116,9 +204,7 @@ async function extractFromPage(page, url, channel) {
     // Filtrar por patrones m3u8
     const isM3u8 = M3U8_PATTERNS.some(p => p.test(reqUrl));
     if (isM3u8) {
-      // Limpiar query params de tracking pero mantener los funcionales
-      const cleanUrl = reqUrl.split('#')[0];
-      foundUrls.add(cleanUrl);
+      foundUrls.add(reqUrl);
     }
   };
 
@@ -127,11 +213,11 @@ async function extractFromPage(page, url, channel) {
     const contentType = (response.headers()['content-type'] || '').toLowerCase();
 
     if (HLS_CONTENT_TYPES.some(t => contentType.includes(t))) {
-      foundUrls.add(respUrl.split('#')[0]);
+      foundUrls.add(respUrl);
     }
 
     if (M3U8_PATTERNS.some(p => p.test(respUrl))) {
-      foundUrls.add(respUrl.split('#')[0]);
+      foundUrls.add(respUrl);
     }
   };
 
@@ -179,7 +265,7 @@ async function extractFromPage(page, url, channel) {
 
     for (const src of domSources) {
       if (M3U8_PATTERNS.some(p => p.test(src))) {
-        foundUrls.add(src.split('#')[0]);
+        foundUrls.add(src);
       }
     }
 
@@ -205,7 +291,7 @@ async function extractFromPage(page, url, channel) {
         });
         for (const src of frameSources) {
           if (M3U8_PATTERNS.some(p => p.test(src))) {
-            foundUrls.add(src.split('#')[0]);
+            foundUrls.add(src);
           }
         }
       } catch (_) {
@@ -295,17 +381,51 @@ async function extractM3U8() {
         }
 
         try {
-          const candidates = await extractFromPage(page, link, channel);
-          console.log(`  Candidatos encontrados: ${candidates.length}`);
+          const rawCandidates = await extractFromPage(page, link, channel);
+          console.log(`  Candidatos crudos: ${rawCandidates.length}`);
 
-          // Validar cada candidato
+          // Ordenar por scoring inteligente y limpiar duplicados
+          const candidates = sortCandidatesByScore(rawCandidates);
+
+          if (candidates.length > 0) {
+            console.log(`  Top candidatos (ordenados por score):`);
+            candidates.slice(0, 5).forEach((c, idx) => {
+              const score = scoreCandidate(c);
+              const clean = c.length > 80 ? c.substring(0, 80) + '...' : c;
+              console.log(`    ${idx + 1}. [score:${score}] ${clean}`);
+            });
+          }
+
+          // Validar cada candidato en orden de prioridad
           for (const candidate of candidates) {
-            console.log(`  Validando: ${candidate.substring(0, 80)}...`);
-            const isValid = await validateM3U8(candidate);
+            const cleanUrl = cleanStreamUrl(candidate);
+            if (!cleanUrl) continue;
+
+            // Evitar URLs duplicadas ya validadas en este run
+            if (streams.some(s => s.channel === channel && s._checked === cleanUrl)) continue;
+
+            console.log(`  Validando: ${cleanUrl.substring(0, 80)}...`);
+            const isValid = await validateM3U8(cleanUrl);
             if (isValid) {
-              foundStream = candidate;
-              console.log(`  [OK] Stream valido encontrado`);
+              foundStream = cleanUrl;
+              console.log(`  [OK] Stream valido encontrado (score: ${scoreCandidate(candidate)})`);
               break;
+            }
+          }
+
+          // Si no encontro con scoring, probar los originales como fallback
+          if (!foundStream && candidates.length > 0) {
+            console.log(`  [INFO] Reintentando con URLs originales como fallback...`);
+            for (const candidate of rawCandidates.slice(0, 3)) {
+              const cleanUrl = cleanStreamUrl(candidate);
+              if (!cleanUrl || streams.some(s => s.channel === channel && s._checked === cleanUrl)) continue;
+              console.log(`  Fallback: ${cleanUrl.substring(0, 80)}...`);
+              const isValid = await validateM3U8(cleanUrl);
+              if (isValid) {
+                foundStream = cleanUrl;
+                console.log(`  [OK] Stream valido por fallback`);
+                break;
+              }
             }
           }
         } catch (err) {
@@ -320,6 +440,7 @@ async function extractM3U8() {
           channel: channel,
           source: link,
           stream: foundStream,
+          _checked: foundStream, // campo interno para dedup
         });
         seenChannels.add(channel);
         console.log(`  [OK] Canal ${channel} -> stream guardado`);
@@ -333,6 +454,9 @@ async function extractM3U8() {
       }
     }
 
+    // Limpiar campos internos antes de guardar
+    const cleanStreams = streams.map(({ _checked, ...rest }) => rest);
+
     // Cargar streams existentes para merge (preservar los que aun sirvan)
     let existingStreams = [];
     if (fs.existsSync(OUTPUT)) {
@@ -344,9 +468,12 @@ async function extractM3U8() {
     // Merge: nuevos streams tienen prioridad, pero preservar canales no encontrados
     const streamMap = new Map();
     for (const s of existingStreams) {
-      streamMap.set(s.channel, s);
+      // Limpiar ip= de streams existentes tambien
+      const cleaned = { ...s };
+      if (cleaned.stream) cleaned.stream = cleanStreamUrl(cleaned.stream);
+      streamMap.set(cleaned.channel, cleaned);
     }
-    for (const s of streams) {
+    for (const s of cleanStreams) {
       streamMap.set(s.channel, s);
     }
 
@@ -356,7 +483,14 @@ async function extractM3U8() {
     fs.writeFileSync(OUTPUT, JSON.stringify(finalStreams, null, 2), 'utf-8');
 
     console.log(`\n[M3U8] ${finalStreams.length} streams guardados en ${OUTPUT}`);
-    console.log(`[M3U8] De ${uniqueChannels.length} canales, ${streams.length} nuevos encontrados`);
+    console.log(`[M3U8] De ${uniqueChannels.length} canales, ${cleanStreams.length} nuevos encontrados`);
+
+    // Log de resumen de URLs guardadas
+    for (const s of finalStreams) {
+      const score = scoreCandidate(s.stream);
+      const prefix = score >= 80 ? 'EXCELENTE' : score >= 30 ? 'OK' : score >= 0 ? 'ADVERTENCIA' : 'REVISAR';
+      console.log(`[M3U8]   [${prefix}] ${s.channel}: ${s.stream.substring(0, 90)}${s.stream.length > 90 ? '...' : ''}`);
+    }
 
     // Si no se encontro ningun stream nuevo y no habia existentes, guardar vacio
     if (finalStreams.length === 0) {
