@@ -2,51 +2,51 @@
   {
     "channel": "amazon1",
     "source": "https://streamx550.com/global2.php?channel=amazon1",
-    "stream": "https://pr745.streamingtv339.com/global/amazon1/index.m3u8?token=381af6888001d849ac9c5a7b8f11231aeed0121f-e4-1778847451-1778793451&ip=64.236.153.162"
+    "stream": "https://pr745.streamingtv339.com/global/amazon1/index.m3u8?token=381af6888001d849ac9c5a7b8f11231aeed0121f-e4-1778847451-1778793451"
   },
   {
     "channel": "premiere2",
     "source": "https://streamx550.com/global2.php?channel=premiere2",
-    "stream": "https://dp744.streamingtv339.com/global/premiere2/index.m3u8?token=fa13c9dfbd00a00a18d3bbcb15f92156b9263d99-31-1778847462-1778793462&ip=64.236.153.162"
+    "stream": "https://dp744.streamingtv339.com/global/premiere2/index.m3u8?token=fa13c9dfbd00a00a18d3bbcb15f92156b9263d99-31-1778847462-1778793462"
   },
   {
     "channel": "amazon2",
     "source": "https://streamx550.com/global2.php?channel=amazon2",
-    "stream": "https://pr745.streamingtv339.com/global/amazon2/index.m3u8?token=7e008a4a4cfe5c6251d246961a91f396474da7cd-52-1778847472-1778793472&ip=64.236.153.162"
+    "stream": "https://pr745.streamingtv339.com/global/amazon2/index.m3u8?token=7e008a4a4cfe5c6251d246961a91f396474da7cd-52-1778847472-1778793472"
   },
   {
     "channel": "amazon3",
     "source": "https://streamx550.com/global2.php?channel=amazon3",
-    "stream": "https://dp744.streamingtv339.com/global/amazon3/index.m3u8?token=8055427a38f483b1304132aba7221a770501b0a6-3a-1778847482-1778793482&ip=64.236.153.162"
+    "stream": "https://dp744.streamingtv339.com/global/amazon3/index.m3u8?token=8055427a38f483b1304132aba7221a770501b0a6-3a-1778847482-1778793482"
   },
   {
     "channel": "foxone2",
     "source": "https://streamx550.com/global2.php?channel=foxone2",
-    "stream": "https://zb533.streamingtv339.com/global/foxone2/index.m3u8?token=662d7a9082d358cdddc0480e98174f4b0366d48b-b4-1778847491-1778793491&ip=64.236.153.162"
+    "stream": "https://zb533.streamingtv339.com/global/foxone2/index.m3u8?token=662d7a9082d358cdddc0480e98174f4b0366d48b-b4-1778847491-1778793491"
   },
   {
     "channel": "dsportsplus",
     "source": "https://streamx550.com/global2.php?channel=dsportsplus",
-    "stream": "https://zb533.streamingtv339.com/global/dsportsplus/index.m3u8?token=5779df2a9bdf411d0404aaa61146697915b5ab7c-08-1778847500-1778793500&ip=64.236.153.162"
+    "stream": "https://dp744.streamingtv339.com/dsportsplus/tracks-v1a1/mono.m3u8?token=74bcf47022e11d6ac5b426a8f0280b033f689c9f-1d-1778853248-1778799248"
   },
   {
     "channel": "premiere1",
     "source": "https://streamx550.com/global2.php?channel=premiere1",
-    "stream": "https://pr745.streamingtv339.com/global/premiere1/index.m3u8?token=709d490f01d33d6e94768f2848c1fe27a8423372-5e-1778847509-1778793509&ip=64.236.153.162"
+    "stream": "https://zb533.streamingtv339.com/premiere1/tracks-v1a1/mono.m3u8?token=94d449373afea57ef732163cd10846cbda6ba8e1-ec-1778853261-1778799261"
   },
   {
     "channel": "espn4mx",
     "source": "https://streamx550.com/global2.php?channel=espn4mx",
-    "stream": "https://pr745.streamingtv339.com/global/espn4mx/index.m3u8?token=ecb4f85517b533945aee807a30e9113f66e47d31-5d-1778847518-1778793518&ip=64.236.153.162"
+    "stream": "https://dp744.streamingtv339.com/espn4mx/tracks-v1a1/mono.m3u8?token=111051cceef6a898c41634ff6ffcf518dc1a4b2d-63-1778853271-1778799271"
   },
   {
     "channel": "foxone1",
     "source": "https://streamx550.com/global2.php?channel=foxone1",
-    "stream": "https://dp744.streamingtv339.com/global/foxone1/index.m3u8?token=fb7dacf8a3a8f6d2f1ec6dad32bbb3fb3874c6f8-4f-1778847527-1778793527&ip=64.236.153.162"
+    "stream": "https://zb533.streamingtv339.com/foxone1/tracks-v1a1/mono.m3u8?token=1b3abfb4ebdfa3452acd80f7e8e7f5ecc52bcf78-db-1778853280-1778799280"
   },
   {
     "channel": "tudnus",
     "source": "https://streamx550.com/global2.php?channel=tudnus",
-    "stream": "https://dp744.streamingtv339.com/global/tudnus/index.m3u8?token=39de37ceea8fb4fedf7763ae2e43a4713c06567f-0d-1778847536-1778793536&ip=64.236.153.162"
+    "stream": "https://dp744.streamingtv339.com/tudnus/tracks-v1a1/mono.m3u8?token=53d03cfd4f0358bf07d85de1a108a347f4d2c743-2b-1778853288-1778799288"
   }
 ]

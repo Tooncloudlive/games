@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ToonCloud Deportes</title>
-<!-- Build: 2026-05-14 23:49 | Events: 10 | Logos: 7 | Streams: 10 -->
+<!-- Build: 2026-05-15 01:25 | Events: 5 | Logos: 0 | Streams: 10 -->
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -46,7 +46,7 @@
   --ios-warning: #ff9f0a;
   --ios-danger: #ff453a;
   --ios-separator: rgba(255, 255, 255, 0.06);
-  
+
   /* Liquid Glass */
   --liquid-bg: rgba(255, 255, 255, 0.01);
   --liquid-border: rgba(255, 255, 255, 0.12);
@@ -54,7 +54,7 @@
   --liquid-highlight: rgba(255, 255, 255, 0.08);
   --liquid-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 0.5px rgba(255, 255, 255, 0.08);
   --liquid-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.12);
-  
+
   /* Typography Scale */
   --text-xs: 0.6875rem;
   --text-sm: 0.8125rem;
@@ -63,7 +63,7 @@
   --text-xl: 1.25rem;
   --text-2xl: 1.5rem;
   --text-3xl: 2rem;
-  
+
   /* Spacing */
   --space-1: 4px;
   --space-2: 8px;
@@ -72,7 +72,7 @@
   --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
-  
+
   /* Radius */
   --radius-sm: 10px;
   --radius-md: 14px;
@@ -1134,40 +1134,40 @@ header {
   .container {
     padding: 80px var(--space-3) var(--space-4);
   }
-  
+
   .match-row {
     gap: var(--space-2);
     min-height: 52px;
   }
-  
+
   .team-logo,
   .team-logo-placeholder {
     width: 36px;
     height: 36px;
   }
-  
+
   .team-name {
     font-size: 0.625rem;
   }
-  
+
   .match-time {
     font-size: var(--text-lg);
   }
-  
+
   .match-center {
     min-width: 68px;
     gap: 4px;
   }
-  
+
   .card-content {
     padding: var(--space-3) var(--space-3);
   }
-  
+
   .channel-area {
     flex-wrap: wrap;
     gap: var(--space-2);
   }
-  
+
   .disclaimer .subtitle {
     font-size: 0.6875rem;
   }
@@ -1177,17 +1177,17 @@ header {
   .container {
     max-width: 720px;
   }
-  
+
   .team-logo,
   .team-logo-placeholder {
     width: 44px;
     height: 44px;
   }
-  
+
   .team-name {
     font-size: var(--text-sm);
   }
-  
+
   .match-time {
     font-size: 1.375rem;
   }
@@ -1202,13 +1202,14 @@ header {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .ambient-orb,
   .ambient-bg::before {
     animation: none !important;
   }
 }
 </style>
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -1310,25 +1311,12 @@ header {
 // El formato es: { match: "Equipo Local vs Equipo Visitante", homeLogo: "URL_ESCUDO_LOCAL", awayLogo: "URL_ESCUDO_VISITANTE" }
 // Si no quieres escudo para un equipo, deja el campo vacio: ""
 
-const matchesLogos = [
-  { match: "Confiança vs Grêmio", homeLogo: "https://static.flashscore.com/res/image/data/KIpOFre5-42i02OW9.png", awayLogo: "https://static.flashscore.com/res/image/data/QPdJscAr-tQsU6dGl.png" },
-  { match: "Atlético Goianiense vs Athletico-PR", homeLogo: "https://static.flashscore.com/res/image/data/WGHITlhl-2eGLPjs8.png", awayLogo: "https://static.flashscore.com/res/image/data/SdnmINcM-QaMaOfUh.png" },
-  { match: "Corinthians vs Barra", homeLogo: "https://static.flashscore.com/res/image/data/lY91WW9r-6cpWH3kh.png", awayLogo: "https://static.flashscore.com/res/image/data/40fc5kyS-ltdTeHH7.png" },
-  { match: "CRB vs Fortaleza", homeLogo: "https://static.flashscore.com/res/image/data/fcXF2AYA-CvmgYbeE.png", awayLogo: "https://static.flashscore.com/res/image/data/2iWbipDr-I1V0sj5p.png" },
-  { match: "Cubs vs Braves", homeLogo: "https://static.flashscore.com/res/image/data/nFvRbjHG-MyFeHWzn.png", awayLogo: "https://static.flashscore.com/res/image/data/IPmhSoEa-hvtJM6zJ.png" },
-  { match: "Vitória vs Flamengo", homeLogo: "https://static.flashscore.com/res/image/data/EglYBtxS-QwRlGht5.png", awayLogo: "https://static.flashscore.com/res/image/data/6ZhQLSDa-4O6MjxPn.png" },
-  { match: "Pachuca vs Pumas UNAM", homeLogo: "https://static.flashscore.com/res/image/data/x4yMKjh5-zFZbB1JF.png", awayLogo: "https://static.flashscore.com/res/image/data/2mlyLKEG-pEQGCKC1.png" }
-];
+const matchesLogos = [];
 
 // =====================================================
 // DATOS DE EVENTOS
 // =====================================================
 const eventsData = [
-  { time: "19:00", match: "Copa do Brasil: Confiança vs Grêmio", link: "https://streamx550.com/global2.php?channel=amazon1" },
-  { time: "19:00", match: "Copa do Brasil: Atlético Goianiense vs Athletico-PR", link: "https://streamx550.com/global2.php?channel=premiere2" },
-  { time: "19:30", match: "Copa do Brasil: Corinthians vs Barra", link: "https://streamx550.com/global2.php?channel=amazon2" },
-  { time: "20:00", match: "Copa do Brasil: CRB vs Fortaleza", link: "https://streamx550.com/global2.php?channel=amazon3" },
-  { time: "20:15", match: "MLB: Cubs vs Braves", link: "https://streamx550.com/global2.php?channel=foxone2" },
   { time: "21:30", match: "Copa do Brasil: Vitória vs Flamengo", link: "https://streamx550.com/global2.php?channel=dsportsplus" },
   { time: "21:30", match: "Copa do Brasil: Vitória vs Flamengo", link: "https://streamx550.com/global2.php?channel=premiere1" },
   { time: "21:30", match: "Copa do Brasil: Vitória vs Flamengo", link: "https://streamx550.com/global2.php?channel=espn4mx" },
@@ -1340,16 +1328,16 @@ const eventsData = [
 // DATOS DE STREAMS M3U8
 // =====================================================
 const streamsData = [
-  { channel: "amazon1", source: "https://streamx550.com/global2.php?channel=amazon1", stream: "https://pr745.streamingtv339.com/global/amazon1/index.m3u8?token=381af6888001d849ac9c5a7b8f11231aeed0121f-e4-1778847451-1778793451&ip=64.236.153.162" },
-  { channel: "premiere2", source: "https://streamx550.com/global2.php?channel=premiere2", stream: "https://dp744.streamingtv339.com/global/premiere2/index.m3u8?token=fa13c9dfbd00a00a18d3bbcb15f92156b9263d99-31-1778847462-1778793462&ip=64.236.153.162" },
-  { channel: "amazon2", source: "https://streamx550.com/global2.php?channel=amazon2", stream: "https://pr745.streamingtv339.com/global/amazon2/index.m3u8?token=7e008a4a4cfe5c6251d246961a91f396474da7cd-52-1778847472-1778793472&ip=64.236.153.162" },
-  { channel: "amazon3", source: "https://streamx550.com/global2.php?channel=amazon3", stream: "https://dp744.streamingtv339.com/global/amazon3/index.m3u8?token=8055427a38f483b1304132aba7221a770501b0a6-3a-1778847482-1778793482&ip=64.236.153.162" },
-  { channel: "foxone2", source: "https://streamx550.com/global2.php?channel=foxone2", stream: "https://dp744.streamingtv339.com/foxone2/tracks-v1a1/mono.m3u8?ip=181.29.203.203&token=a8fb925d5e4136bea0c3c5f1fb0654ee68bb518e-8f-1778848297-1778794297" },
-  { channel: "dsportsplus", source: "https://streamx550.com/global2.php?channel=dsportsplus", stream: "https://zb533.streamingtv339.com/global/dsportsplus/index.m3u8?token=5779df2a9bdf411d0404aaa61146697915b5ab7c-08-1778847500-1778793500&ip=64.236.153.162" },
-  { channel: "premiere1", source: "https://streamx550.com/global2.php?channel=premiere1", stream: "https://pr745.streamingtv339.com/global/premiere1/index.m3u8?token=709d490f01d33d6e94768f2848c1fe27a8423372-5e-1778847509-1778793509&ip=64.236.153.162" },
-  { channel: "espn4mx", source: "https://streamx550.com/global2.php?channel=espn4mx", stream: "https://pr745.streamingtv339.com/global/espn4mx/index.m3u8?token=ecb4f85517b533945aee807a30e9113f66e47d31-5d-1778847518-1778793518&ip=64.236.153.162" },
-  { channel: "foxone1", source: "https://streamx550.com/global2.php?channel=foxone1", stream: "https://dp744.streamingtv339.com/global/foxone1/index.m3u8?token=fb7dacf8a3a8f6d2f1ec6dad32bbb3fb3874c6f8-4f-1778847527-1778793527&ip=64.236.153.162" },
-  { channel: "tudnus", source: "https://streamx550.com/global2.php?channel=tudnus", stream: "https://dp744.streamingtv339.com/global/tudnus/index.m3u8?token=39de37ceea8fb4fedf7763ae2e43a4713c06567f-0d-1778847536-1778793536&ip=64.236.153.162" }
+  { channel: "amazon1", source: "https://streamx550.com/global2.php?channel=amazon1", stream: "https://pr745.streamingtv339.com/global/amazon1/index.m3u8?token=381af6888001d849ac9c5a7b8f11231aeed0121f-e4-1778847451-1778793451" },
+  { channel: "premiere2", source: "https://streamx550.com/global2.php?channel=premiere2", stream: "https://dp744.streamingtv339.com/global/premiere2/index.m3u8?token=fa13c9dfbd00a00a18d3bbcb15f92156b9263d99-31-1778847462-1778793462" },
+  { channel: "amazon2", source: "https://streamx550.com/global2.php?channel=amazon2", stream: "https://pr745.streamingtv339.com/global/amazon2/index.m3u8?token=7e008a4a4cfe5c6251d246961a91f396474da7cd-52-1778847472-1778793472" },
+  { channel: "amazon3", source: "https://streamx550.com/global2.php?channel=amazon3", stream: "https://dp744.streamingtv339.com/global/amazon3/index.m3u8?token=8055427a38f483b1304132aba7221a770501b0a6-3a-1778847482-1778793482" },
+  { channel: "foxone2", source: "https://streamx550.com/global2.php?channel=foxone2", stream: "https://zb533.streamingtv339.com/global/foxone2/index.m3u8?token=662d7a9082d358cdddc0480e98174f4b0366d48b-b4-1778847491-1778793491" },
+  { channel: "dsportsplus", source: "https://streamx550.com/global2.php?channel=dsportsplus", stream: "https://dp744.streamingtv339.com/dsportsplus/tracks-v1a1/mono.m3u8?token=74bcf47022e11d6ac5b426a8f0280b033f689c9f-1d-1778853248-1778799248" },
+  { channel: "premiere1", source: "https://streamx550.com/global2.php?channel=premiere1", stream: "https://zb533.streamingtv339.com/premiere1/tracks-v1a1/mono.m3u8?token=94d449373afea57ef732163cd10846cbda6ba8e1-ec-1778853261-1778799261" },
+  { channel: "espn4mx", source: "https://streamx550.com/global2.php?channel=espn4mx", stream: "https://dp744.streamingtv339.com/espn4mx/tracks-v1a1/mono.m3u8?token=111051cceef6a898c41634ff6ffcf518dc1a4b2d-63-1778853271-1778799271" },
+  { channel: "foxone1", source: "https://streamx550.com/global2.php?channel=foxone1", stream: "https://zb533.streamingtv339.com/foxone1/tracks-v1a1/mono.m3u8?token=1b3abfb4ebdfa3452acd80f7e8e7f5ecc52bcf78-db-1778853280-1778799280" },
+  { channel: "tudnus", source: "https://streamx550.com/global2.php?channel=tudnus", stream: "https://dp744.streamingtv339.com/tudnus/tracks-v1a1/mono.m3u8?token=53d03cfd4f0358bf07d85de1a108a347f4d2c743-2b-1778853288-1778799288" }
 ];
 
 // =====================================================
@@ -1401,15 +1389,15 @@ function normalizeText(text) {
 function similarity(str1, str2) {
   const s1 = normalizeText(str1);
   const s2 = normalizeText(str2);
-  
+
   if (s1 === s2) return 1;
   if (s1.includes(s2) || s2.includes(s1)) return 0.9;
-  
+
   const words1 = s1.split(' ').filter(w => w.length > 2);
   const words2 = s2.split(' ').filter(w => w.length > 2);
-  
+
   if (words1.length === 0 || words2.length === 0) return 0;
-  
+
   let matches = 0;
   for (const w1 of words1) {
     for (const w2 of words2) {
@@ -1419,7 +1407,7 @@ function similarity(str1, str2) {
       }
     }
   }
-  
+
   return matches / Math.max(words1.length, words2.length);
 }
 
@@ -1427,8 +1415,8 @@ function extractTeamNames(matchText) {
   const withoutCompetition = matchText.replace(/^[^:]+:\s*/, '');
   const vsMatch = withoutCompetition.match(/(.+?)\s+vs\s+(.+)/i);
   if (vsMatch) {
-    return { 
-      home: vsMatch[1].trim(), 
+    return {
+      home: vsMatch[1].trim(),
       away: vsMatch[2].trim(),
       full: withoutCompetition.trim()
     };
@@ -1440,34 +1428,34 @@ function getLogosForMatch(matchText) {
   const eventTeams = extractTeamNames(matchText);
   let bestMatch = null;
   let bestScore = 0;
-  
+
   for (const item of matchesLogos) {
     const configTeams = extractTeamNames(item.match);
-    
+
     const homeScore = similarity(eventTeams.home, configTeams.home);
-    
-    const awayScore = eventTeams.away && configTeams.away 
+
+    const awayScore = eventTeams.away && configTeams.away
       ? similarity(eventTeams.away, configTeams.away)
       : 0.5;
-    
+
     const totalScore = (homeScore + awayScore) / 2;
-    
+
     if (homeScore > 0.6 && awayScore > 0.6 && totalScore > bestScore) {
       bestScore = totalScore;
       bestMatch = item;
     }
-    
+
     const fullSimilarity = similarity(eventTeams.full, configTeams.full);
     if (fullSimilarity > 0.8 && fullSimilarity > bestScore) {
       bestScore = fullSimilarity;
       bestMatch = item;
     }
   }
-  
+
   if (bestMatch) {
     return { homeLogo: bestMatch.homeLogo, awayLogo: bestMatch.awayLogo };
   }
-  
+
   return { homeLogo: null, awayLogo: null };
 }
 
@@ -1492,7 +1480,7 @@ function extractDominantColor(imageUrl, callback) {
     callback(teamColorCache.get(imageUrl));
     return;
   }
-  
+
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.onload = function() {
@@ -1502,29 +1490,29 @@ function extractDominantColor(imageUrl, callback) {
       canvas.width = 40;
       canvas.height = 40;
       ctx.drawImage(img, 0, 0, 40, 40);
-      
+
       const imageData = ctx.getImageData(0, 0, 40, 40).data;
       let r = 0, g = 0, b = 0, count = 0;
-      
+
       // Sample every 4th pixel for performance
       for (let i = 0; i < imageData.length; i += 16) {
         const pr = imageData[i];
         const pg = imageData[i + 1];
         const pb = imageData[i + 2];
         const pa = imageData[i + 3];
-        
+
         // Skip transparent, white, black, and gray pixels
         if (pa < 128) continue;
         const brightness = (pr + pg + pb) / 3;
         if (brightness > 240 || brightness < 15) continue;
         if (Math.abs(pr - pg) < 15 && Math.abs(pg - pb) < 15 && Math.abs(pr - pb) < 15) continue;
-        
+
         r += pr;
         g += pg;
         b += pb;
         count++;
       }
-      
+
       if (count > 0) {
         const color = { r: Math.round(r / count), g: Math.round(g / count), b: Math.round(b / count) };
         teamColorCache.set(imageUrl, color);
@@ -1547,20 +1535,20 @@ function extractDominantColor(imageUrl, callback) {
 
 function applyTeamGradient(cardElement, homeLogoUrl, awayLogoUrl) {
   if (!homeLogoUrl && !awayLogoUrl) return;
-  
+
   let colorsExtracted = 0;
   let homeColor = null;
   let awayColor = null;
-  
+
   function tryApply() {
     if (colorsExtracted < 2) return;
-    
+
     const gradEl = cardElement.querySelector('.card-gradient-bg');
     if (!gradEl) return;
-    
+
     const c1 = homeColor || { r: 10, g: 132, b: 255 };
     const c2 = awayColor || { r: 175, g: 82, b: 222 };
-    
+
     // Softer, more diffuse gradient - Apple Sports style
     gradEl.style.background = `
       radial-gradient(ellipse 90% 70% at 20% 50%,
@@ -1572,7 +1560,7 @@ function applyTeamGradient(cardElement, homeLogoUrl, awayLogoUrl) {
     `;
     gradEl.classList.add('loaded');
   }
-  
+
   if (homeLogoUrl) {
     extractDominantColor(homeLogoUrl, function(color) {
       homeColor = color;
@@ -1582,7 +1570,7 @@ function applyTeamGradient(cardElement, homeLogoUrl, awayLogoUrl) {
   } else {
     colorsExtracted++;
   }
-  
+
   if (awayLogoUrl) {
     extractDominantColor(awayLogoUrl, function(color) {
       awayColor = color;
@@ -1601,20 +1589,20 @@ function applyTeamGradient(cardElement, homeLogoUrl, awayLogoUrl) {
 function generateMatchHTML(matchText, cardElement) {
   const { team1, team2 } = extractTeamsFromMatch(matchText);
   const { homeLogo, awayLogo } = getLogosForMatch(matchText);
-  
+
   // Apply team color gradient to card
   if (cardElement && homeLogo && awayLogo) {
     setTimeout(() => applyTeamGradient(cardElement, homeLogo, awayLogo), 50);
   }
-  
-  const logo1HTML = homeLogo 
+
+  const logo1HTML = homeLogo
     ? `<img src="${homeLogo}" alt="${team1}" class="team-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="team-logo-placeholder" style="display:none;"></div>`
     : `<div class="team-logo-placeholder"></div>`;
-    
-  const logo2HTML = awayLogo 
+
+  const logo2HTML = awayLogo
     ? `<img src="${awayLogo}" alt="${team2}" class="team-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="team-logo-placeholder" style="display:none;"></div>`
     : `<div class="team-logo-placeholder"></div>`;
-  
+
   return { team1, team2, logo1HTML, logo2HTML, homeLogo, awayLogo };
 }
 
@@ -1626,9 +1614,9 @@ function getLeague(match) {
   // Extraer el nombre de la liga: todo el texto que precede al primer ":"
   const colonIndex = match.indexOf(':');
   if (colonIndex === -1) return 'PARTIDO';
-  
+
   const leagueName = match.substring(0, colonIndex).trim();
-  
+
   // Verificar si existe en el diccionario de mapeo
   // Si existe, devolver el nombre personalizado; si no, el nombre original
   return leagueMapping[leagueName] || leagueName;
@@ -1755,10 +1743,10 @@ function selectChannel(matchId, link, name) {
 function renderEvents(list = eventsData) {
   const container = document.getElementById("events");
   container.innerHTML = "";
-  
+
   let grouped = groupEventsByMatch(list);
   grouped = grouped.filter(ev => getStatus(ev.time) !== "FINALIZADO");
-  
+
   groupedEventsCache = grouped;
   updateStats(list);
 
@@ -1804,7 +1792,7 @@ function renderEvents(list = eventsData) {
             </button>
             <div class="channel-dropdown hidden" id="dropdown-${matchId}">
               ${ev.channels.map(ch => `
-                <button class="channel-option ${ch.link === ev.channels[0].link ? 'active' : ''}" 
+                <button class="channel-option ${ch.link === ev.channels[0].link ? 'active' : ''}"
                         onclick="selectChannel('${matchId}', '${ch.link}', '${ch.displayName}')">
                   ${ch.displayName}
                 </button>
@@ -1821,13 +1809,13 @@ function renderEvents(list = eventsData) {
     card.innerHTML = `
       <!-- Team color gradient background layer -->
       <div class="card-gradient-bg"></div>
-      
+
       <div class="card-content">
         <!-- League Badge -->
         <div class="card-league-row">
           <span class="league-badge">${league}</span>
         </div>
-        
+
         <!-- Match Row: Home | Center | Away -->
         <div class="match-row">
           <!-- Home Team -->
@@ -1835,7 +1823,7 @@ function renderEvents(list = eventsData) {
             ${logo1HTML}
             <span class="team-name" title="${team1}">${team1}</span>
           </div>
-          
+
           <!-- Center: Time + Status -->
           <div class="match-center">
             <span class="match-time">${ev.time}</span>
@@ -1844,18 +1832,18 @@ function renderEvents(list = eventsData) {
               <span>${status}</span>
             </span>
           </div>
-          
+
           <!-- Away Team -->
           <div class="team-side away">
             ${logo2HTML}
             <span class="team-name" title="${team2 || ''}">${team2 || ''}</span>
           </div>
         </div>
-        
+
         <!-- Channel + Watch Button Row -->
         <div class="channel-area">
           ${channelHTML}
-          <button class="btn-watch ${isActive ? 'enabled' : 'disabled'}" 
+          <button class="btn-watch ${isActive ? 'enabled' : 'disabled'}"
                   ${isActive ? `onclick="watchMatch('${matchId}')"` : ''}>
             <span>${isActive ? '&#9654;' : '&#8987;'}</span>
             <span>${isActive ? 'Ver' : 'Proximo'}</span>
@@ -1869,12 +1857,33 @@ function renderEvents(list = eventsData) {
 }
 
 // =====================================================
-// HLS.JS INTEGRACION
+// HLS.JS INTEGRACION - CON LIMPIEZA DE URL Y RETRY
 // =====================================================
 
 let hlsInstance = null;
 let currentStreamUrl = null;
 let currentMatchTitle = '';
+let _triedCleanUrl = false; // evita loop infinito de retry
+
+/**
+ * Limpia parametros problematicos de una URL de stream.
+ * Elimina ip= hardcodeado (del runner de GitHub Actions).
+ * Mantiene token y otros parametros funcionales.
+ * Se usa tanto en el extractor como respaldo en el frontend.
+ */
+function cleanStreamUrl(url) {
+  if (!url || typeof url !== 'string') return url;
+  try {
+    const urlObj = new URL(url);
+    const paramsToRemove = ['ip'];
+    for (const p of paramsToRemove) {
+      urlObj.searchParams.delete(p);
+    }
+    return urlObj.toString();
+  } catch {
+    return url.replace(/[?&]ip=[^&]+/g, '').replace(/\?$/, '').replace(/&&+/g, '&').replace(/\?&/, '?');
+  }
+}
 
 function getChannelFromLink(link) {
   const match = link.match(/channel=([a-zA-Z0-9]+)/);
@@ -1883,20 +1892,23 @@ function getChannelFromLink(link) {
 
 function resolveStreamUrl(link) {
   const channel = getChannelFromLink(link);
-  if (!channel || !streamsData || !streamsData.length) return link;
+  if (!channel || !streamsData || !streamsData.length) return cleanStreamUrl(link);
 
   // Buscar en streamsData el m3u8 para este canal
   const found = streamsData.find(s => s.channel === channel);
   if (found && found.stream) {
-    return found.stream;
+    // Siempre limpiar ip= como doble proteccion
+    return cleanStreamUrl(found.stream);
   }
 
-  // Fallback: si no hay m3u8 para este canal, usar el link original (iframe legacy)
-  return link;
+  // Fallback: limpiar el link original
+  return cleanStreamUrl(link);
 }
 
 function isM3U8(url) {
-  return url && (url.toLowerCase().includes('.m3u8') || url.toLowerCase().includes('application/x-mpegurl'));
+  if (!url) return false;
+  const u = url.toLowerCase();
+  return u.includes('.m3u8') || u.includes('application/x-mpegurl');
 }
 
 function destroyHLS() {
@@ -1931,6 +1943,7 @@ function showVideoError(show) {
 function initHLS(streamUrl, matchTitle) {
   currentStreamUrl = streamUrl;
   currentMatchTitle = matchTitle;
+  _triedCleanUrl = false;
   const video = document.getElementById('video-player');
 
   showVideoLoading(true);
@@ -1984,6 +1997,23 @@ function initHLS(streamUrl, matchTitle) {
         switch (data.type) {
           case Hls.ErrorTypes.NETWORK_ERROR:
             console.log('[HLS] Error de red, intentando recuperar...');
+
+            // Si la URL tiene ip= hardcodeado, intentar con URL limpia automaticamente
+            if (!_triedCleanUrl && currentStreamUrl && currentStreamUrl.includes('ip=')) {
+              const cleanUrl = cleanStreamUrl(currentStreamUrl);
+              if (cleanUrl !== currentStreamUrl) {
+                console.log('[HLS] Reintentando con URL limpia (sin ip hardcodeado):', cleanUrl);
+                _triedCleanUrl = true;
+                currentStreamUrl = cleanUrl;
+                destroyHLS();
+                showVideoLoading(true);
+                showVideoError(false);
+                // Reintentar con URL limpia
+                setTimeout(() => initHLS(cleanUrl, currentMatchTitle), 500);
+                return;
+              }
+            }
+
             showVideoError(true);
             break;
           case Hls.ErrorTypes.MEDIA_ERROR:
@@ -2009,6 +2039,16 @@ function initHLS(streamUrl, matchTitle) {
       video.play().catch(() => {});
     });
     video.addEventListener('error', function () {
+      // Si falla en Safari y la URL tiene ip=, intentar con limpia
+      if (!_triedCleanUrl && streamUrl.includes('ip=')) {
+        const cleanUrl = cleanStreamUrl(streamUrl);
+        if (cleanUrl !== streamUrl) {
+          _triedCleanUrl = true;
+          currentStreamUrl = cleanUrl;
+          video.src = cleanUrl;
+          return;
+        }
+      }
       showVideoLoading(false);
       showVideoError(true);
     });
@@ -2019,9 +2059,13 @@ function initHLS(streamUrl, matchTitle) {
 }
 
 function retryStream() {
+  _triedCleanUrl = false;
   if (currentStreamUrl) {
     showVideoError(false);
-    initHLS(currentStreamUrl, currentMatchTitle);
+    // Al reintentar manualmente, siempre limpiar primero
+    const cleanUrl = cleanStreamUrl(currentStreamUrl);
+    currentStreamUrl = cleanUrl;
+    initHLS(cleanUrl, currentMatchTitle);
   }
 }
 
@@ -2042,7 +2086,7 @@ function openPlayer(link, matchTitle) {
   document.getElementById("player-title-text").textContent = matchTitle;
   document.body.style.overflow = "hidden";
 
-  // Resolver el stream m3u8 real
+  // Resolver el stream m3u8 real (ya limpia ip=)
   const streamUrl = resolveStreamUrl(link);
   initHLS(streamUrl, matchTitle);
 }
@@ -2070,7 +2114,7 @@ function updateStatuses() {
     const time = card.dataset.time;
     if (!time) return;
     const status = getStatus(time);
-    
+
     if (status === "FINALIZADO") {
       card.classList.add('removing');
       setTimeout(() => {
@@ -2089,12 +2133,12 @@ function updateStatuses() {
       }, 400);
       return;
     }
-    
+
     const statusEl = card.querySelector('.match-center .status-badge');
     const btn = card.querySelector('.btn-watch');
     if (status === "EN VIVO") liveCount++;
     else if (status === "PROXIMO") upcomingCount++;
-    
+
     const currentStatusText = statusEl.querySelector('span:last-child').textContent;
     if (currentStatusText !== status) {
       statusEl.className = `status-badge ${status === 'EN VIVO' ? 'status-live-center' : 'status-upcoming-center'}`;
