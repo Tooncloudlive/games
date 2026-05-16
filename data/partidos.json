@@ -1,135 +1,5 @@
 [
   {
-    "time": "09:00",
-    "match": "LaLiga 2: Real Sociedad II vs Mirandés",
-    "link": "https://streamx550.com/global2.php?channel=hyper1"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: St. Pauli vs Wolfsburg",
-    "link": "https://streamx550.com/global2.php?channel=disney1"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: St. Pauli vs Wolfsburg",
-    "link": "https://streamx550.com/global2.php?channel=espn5"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Bayer Leverkusen vs Hamburger SV",
-    "link": "https://streamx550.com/global2.php?channel=disney2"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Eintracht Frankfurt vs Stuttgart",
-    "link": "https://streamx550.com/global2.php?channel=disney3"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Bayern München vs Köln",
-    "link": "https://streamx550.com/global2.php?channel=disney4"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Werder Bremen vs Borussia Dortmund",
-    "link": "https://streamx550.com/global2.php?channel=disney5"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Werder Bremen vs Borussia Dortmund",
-    "link": "https://streamx550.com/global2.php?channel=espn2"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Heidenheim vs Mainz 05",
-    "link": "https://streamx550.com/global2.php?channel=disney6"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Union Berlin vs Augsburg",
-    "link": "https://streamx550.com/global2.php?channel=disney7"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Borussia M'gladbach vs Hoffenheim",
-    "link": "https://streamx550.com/global2.php?channel=disney8"
-  },
-  {
-    "time": "10:30",
-    "match": "Bundesliga: Freiburg vs RB Leipzig",
-    "link": "https://streamx550.com/global2.php?channel=disney9"
-  },
-  {
-    "time": "11:00",
-    "match": "FA Cup: Chelsea vs Manchester City - Final",
-    "link": "https://streamx550.com/global2.php?channel=disney10"
-  },
-  {
-    "time": "11:00",
-    "match": "FA Cup: Chelsea vs Manchester City - Final",
-    "link": "https://streamx550.com/global2.php?channel=max1"
-  },
-  {
-    "time": "11:00",
-    "match": "FA Cup: Chelsea vs Manchester City - Final",
-    "link": "https://streamx550.com/global2.php?channel=espn"
-  },
-  {
-    "time": "11:00",
-    "match": "FA Cup: Chelsea vs Manchester City - Final",
-    "link": "https://streamx550.com/global2.php?channel=espndeportes"
-  },
-  {
-    "time": "11:00",
-    "match": "FA Cup: Chelsea vs Manchester City - Final",
-    "link": "https://streamx550.com/global2.php?channel=tnt1uk"
-  },
-  {
-    "time": "11:15",
-    "match": "LaLiga 2: Ceuta vs Málaga",
-    "link": "https://streamx550.com/global2.php?channel=hyper1"
-  },
-  {
-    "time": "11:15",
-    "match": "LaLiga 2: Cultural Leonesa vs Eibar",
-    "link": "https://streamx550.com/global2.php?channel=hyper2"
-  },
-  {
-    "time": "12:00",
-    "match": "Primera División: Boston River vs Cerro",
-    "link": "https://streamx550.com/global2.php?channel=disney11"
-  },
-  {
-    "time": "13:05",
-    "match": "Liga Profesional Saudí: Al Hilal vs NEOM",
-    "link": "https://streamx550.com/global2.php?channel=foxone1"
-  },
-  {
-    "time": "13:05",
-    "match": "Liga Profesional Saudí: Al Hilal vs NEOM",
-    "link": "https://streamx550.com/global2.php?channel=foxdeportes"
-  },
-  {
-    "time": "13:05",
-    "match": "Liga Profesional Saudí: Al Hilal vs NEOM",
-    "link": "https://streamx550.com/global2.php?channel=sportv1"
-  },
-  {
-    "time": "13:30",
-    "match": "LaLiga 2: Racing Santander vs Real Valladolid",
-    "link": "https://streamx550.com/global2.php?channel=hyper1"
-  },
-  {
-    "time": "13:30",
-    "match": "LaLiga 2: Almería vs Las Palmas",
-    "link": "https://streamx550.com/global2.php?channel=hyper2"
-  },
-  {
-    "time": "13:30",
-    "match": "LaLiga 2: Granada vs Burgos",
-    "link": "https://streamx550.com/global2.php?channel=hyper3"
-  },
-  {
     "time": "14:45",
     "match": "AFC Champions League Two: Al Nassr vs Gamba Osaka - Final",
     "link": "https://streamx550.com/global2.php?channel=disney12"
@@ -243,6 +113,11 @@
     "time": "19:30",
     "match": "Liga Profesional: River Plate vs Rosario Central",
     "link": "https://streamx550.com/global2.php?channel=disney2"
+  },
+  {
+    "time": "19:30",
+    "match": "Liga Profesional: River Plate vs Rosario Central",
+    "link": "https://streamx550.com/global2.php?channel=tntar"
   },
   {
     "time": "19:30",
