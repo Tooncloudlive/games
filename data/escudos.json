@@ -1,100 +1,5 @@
 [
   {
-    "match": "Genoa vs Milan",
-    "homeLogo": "",
-    "awayLogo": "https://static.flashscore.com/res/image/data/htYjIjFa-KtCfnbWp.png"
-  },
-  {
-    "match": "Como vs Parma",
-    "homeLogo": "https://static.flashscore.com/res/image/data/Cf5pQNyS-hpmw8K1h.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/YcrE7ae5-fydXzLY6.png"
-  },
-  {
-    "match": "Juventus vs Fiorentina",
-    "homeLogo": "https://static.flashscore.com/res/image/data/GKF3dlf5-0nz5yHcE.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/nPTphRh5-6XKdgOM6.png"
-  },
-  {
-    "match": "Pisa vs Napoli",
-    "homeLogo": "https://static.flashscore.com/res/image/data/INV0YnzB-KxEUYJr3.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/j9FXKMWg-IsTBfJP2.png"
-  },
-  {
-    "match": "Manchester United vs Nottingham Forest",
-    "homeLogo": "https://livesport-ott-images.ssl.cdn.cra.cz/r900xfq60/42104d38-3a8e-4213-b338-473c3d0e0ab9.avif",
-    "awayLogo": "https://static.flashscore.com/res/image/data/GCLLkTzB-ImKwLTtA.png"
-  },
-  {
-    "match": "Deportivo La Coruña vs FC Andorra",
-    "homeLogo": "https://static.flashscore.com/res/image/data/bsKstwAr-UZkpPVoT.png",
-    "awayLogo": "https://livesport-ott-images.ssl.cdn.cra.cz/r900xfq60/be1c3123-ad6a-4133-be1a-75bcb62a49ca.avif"
-  },
-  {
-    "match": "AZ vs NAC Breda",
-    "homeLogo": "https://static.flashscore.com/res/image/data/8ITBcOkl-4vob7cTR.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/ALTq5CWg-voRxy8ml.png"
-  },
-  {
-    "match": "PSV vs Twente",
-    "homeLogo": "https://static.flashscore.com/res/image/data/0W1C1myS-Myi417I9.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/hv06wPCa-vPBRGCA8.png"
-  },
-  {
-    "match": "Heerenveen vs Ajax",
-    "homeLogo": "https://static.flashscore.com/res/image/data/jN0XaHYg-4vob7cTR.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/nHNpUPcM-bZZPiwAI.png"
-  },
-  {
-    "match": "PEC Zwolle vs Feyenoord",
-    "homeLogo": "https://static.flashscore.com/res/image/data/xOXgKoil-MaNvVpSj.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/2ebRtpBr-zVZIA7Nc.png"
-  },
-  {
-    "match": "Inter vs Verona",
-    "homeLogo": "https://static.flashscore.com/res/image/data/lxz64qDa-O8c8nWOb.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/KdjM3dBr-6uyXbx77.png"
-  },
-  {
-    "match": "Leeds United vs Brighton & Hove Albion",
-    "homeLogo": "https://static.flashscore.com/res/image/data/MJTpoReM-YPXquC5S.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/8W2n2sf5-hhXb9pPG.png"
-  },
-  {
-    "match": "Brentford vs Crystal Palace",
-    "homeLogo": "https://static.flashscore.com/res/image/data/bBj3NWfM-r9Mudk7j.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/AFNlsDzS-drybTCiH.png"
-  },
-  {
-    "match": "Everton vs Sunderland",
-    "homeLogo": "https://static.flashscore.com/res/image/data/EwJqZUZA-bRmKmISE.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/ln86XXjl-0d34NJCO.png"
-  },
-  {
-    "match": "Santos vs Coritiba",
-    "homeLogo": "https://static.flashscore.com/res/image/data/rJGaKUhl-hv442jSk.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/xKm8lie5-bwYqIWsq.png"
-  },
-  {
-    "match": "ADT vs Comerciantes Unidos",
-    "homeLogo": "https://cdn.cookielaw.org/logos/static/ot_company_logo.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/lOuqQhhl-8dieWfgh.png"
-  },
-  {
-    "match": "Atalanta vs Bologna",
-    "homeLogo": "https://static.flashscore.com/res/image/data/KxGxs1Ar-SbNOdKb2.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/O6QDp6FG-KOOHj4io.png"
-  },
-  {
-    "match": "Huachipato vs Unión La Calera",
-    "homeLogo": "https://static.flashscore.com/res/image/data/v7pzlUCa-xIMey4eD.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/AJdiRXkl-0p3SjwUb.png"
-  },
-  {
-    "match": "Sevilla vs Real Madrid",
-    "homeLogo": "https://static.flashscore.com/res/image/data/G2BgO5Ar-tIT0KyhE.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/A7kHoxZA-ttfpEDUq.png"
-  },
-  {
     "match": "Atlético Madrid vs Girona",
     "homeLogo": "https://static.flashscore.com/res/image/data/CjfjIsYg-GhHiNvXF.png",
     "awayLogo": "https://static.flashscore.com/res/image/data/xGkOqFDa-vPm0hQMN.png"
@@ -131,8 +36,8 @@
   },
   {
     "match": "Real Oviedo vs Deportivo Alavés",
-    "homeLogo": "https://static.flashscore.com/res/image/data/z16nhrjl-Y7pkY0PJ.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/hrI86AzS-EXAuP9cb.png"
+    "homeLogo": "https://static.flashscore.com/res/image/data/YgNP5xZg-6XSwp5sl.png",
+    "awayLogo": "https://static.flashscore.com/res/image/data/lSbR5yf5-6qgSGi4o.png"
   },
   {
     "match": "Kasımpaşa vs Galatasaray",
@@ -161,8 +66,8 @@
   },
   {
     "match": "Cagliari vs Torino",
-    "homeLogo": "https://static.flashscore.com/res/image/data/Uq6J4BZA-SIDDuAGg.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/29C3NSwS-jo6FMO7U.png"
+    "homeLogo": "https://static.flashscore.com/res/image/data/IBlLf9f5-McvX4bye.png",
+    "awayLogo": "https://static.flashscore.com/res/image/data/OQWGjGcM-0lwy4Ij1.png"
   },
   {
     "match": "Sassuolo vs Lecce",
@@ -176,8 +81,8 @@
   },
   {
     "match": "Paris vs PSG",
-    "homeLogo": "https://static.flashscore.com/res/image/data/AmyHz4Xg-AelKXger.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/EskJufg5-A7UDDuOO.png"
+    "homeLogo": "https://static.flashscore.com/res/image/data/f9dzeDzB-hEviRC6T.png",
+    "awayLogo": "https://static.flashscore.com/res/image/data/GSQZijHG-hjAZZSzd.png"
   },
   {
     "match": "Brest vs Angers SCO",
@@ -297,7 +202,7 @@
   {
     "match": "Deportes Concepción vs Everton",
     "homeLogo": "https://static.flashscore.com/res/image/data/nkZ3BZjl-KbTonrXB.png",
-    "awayLogo": "https://static.flashscore.com/res/image/data/EwJqZUZA-bRmKmISE.png"
+    "awayLogo": "https://static.flashscore.com/res/image/data/IaM72BCr-futBA1p8.png"
   },
   {
     "match": "Pumas UNAM vs Pachuca",
