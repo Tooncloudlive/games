@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ToonCloud Deportes</title>
-<!-- Build: 2026-05-18 09:37 | Events: 0 | Logos: 0 | Streams: 0 -->
+<!-- Build: 2026-05-18 19:26 | Events: 11 | Logos: 6 | Streams: 11 -->
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1311,17 +1311,48 @@ header {
 // El formato es: { match: "Equipo Local vs Equipo Visitante", homeLogo: "URL_ESCUDO_LOCAL", awayLogo: "URL_ESCUDO_VISITANTE" }
 // Si no quieres escudo para un equipo, deja el campo vacio: ""
 
-const matchesLogos = [];
+const matchesLogos = [
+  { match: "Arsenal vs Burnley", homeLogo: "https://static.flashscore.com/res/image/data/pfchdCg5-vcNAdtF9.png", awayLogo: "https://static.flashscore.com/res/image/data/UaPJjYBr-6PhTI7J6.png" },
+  { match: "Deportivo Maldonado vs Danubio", homeLogo: "https://static.flashscore.com/res/image/data/KULuUkCr-xvp8ggnJ.png", awayLogo: "https://static.flashscore.com/res/image/data/SE9ju9cM-vaUkIxVj.png" },
+  { match: "Thunder vs Spurs", homeLogo: "https://static.flashscore.com/res/image/data/bFgddNh5-4zc22IQb.png", awayLogo: "https://static.flashscore.com/res/image/data/8f2WVCFG-SrHHDGUm.png" },
+  { match: "Dodgers vs Padres", homeLogo: "https://static.flashscore.com/res/image/data/YeWStKhl-xUjXmOIP.png", awayLogo: "https://static.flashscore.com/res/image/data/YsFz7vWg-plL3Lm41.png" },
+  { match: "White Sox vs Mariners", homeLogo: "https://static.flashscore.com/res/image/data/rHrt6LAr-MFkjl69i.png", awayLogo: "https://static.flashscore.com/res/image/data/YPyyksFG-CrchK1NQ.png" },
+  { match: "Real España vs Marathón", homeLogo: "https://static.flashscore.com/res/image/data/QPHZHyg5-dQeZ4aH3.png", awayLogo: "https://static.flashscore.com/res/image/data/MVfV9cGG-IJKf4CSg.png" }
+];
 
 // =====================================================
 // DATOS DE EVENTOS
 // =====================================================
-const eventsData = [];
+const eventsData = [
+  { time: "15:30", match: "LaLiga 2: Leganés vs Huesca", link: "https://streamx550.com/global2.php?channel=hyper1" },
+  { time: "16:00", match: "Premier League: Arsenal vs Burnley", link: "https://streamx550.com/global2.php?channel=disney1" },
+  { time: "16:00", match: "Premier League: Arsenal vs Burnley", link: "https://streamx550.com/global2.php?channel=espn" },
+  { time: "16:00", match: "Premier League: Arsenal vs Burnley", link: "https://streamx550.com/global2.php?channel=max1" },
+  { time: "16:00", match: "Premier League: Arsenal vs Burnley", link: "https://streamx550.com/global2.php?channel=universo" },
+  { time: "18:30", match: "Primera División: Deportivo Maldonado vs Danubio", link: "https://streamx550.com/global2.php?channel=disney2" },
+  { time: "21:30", match: "NBA: Thunder vs Spurs", link: "https://streamx550.com/global2.php?channel=max2" },
+  { time: "22:40", match: "MLB: Dodgers vs Padres", link: "https://streamx550.com/global2.php?channel=espn3" },
+  { time: "22:40", match: "MLB: Dodgers vs Padres", link: "https://streamx550.com/global2.php?channel=espn2mx" },
+  { time: "22:40", match: "MLB: White Sox vs Mariners", link: "https://streamx550.com/global2.php?channel=espn5" },
+  { time: "23:15", match: "Liga Nacional: Real España vs Marathón", link: "https://streamx550.com/global2.php?channel=foxdeportes" }
+];
 
 // =====================================================
 // DATOS DE STREAMS M3U8
 // =====================================================
-const streamsData = [];
+const streamsData = [
+  { channel: "hyper1", source: "https://streamx550.com/global2.php?channel=hyper1", stream: "https://pr745.streamingtv339.com/hyper1/tracks-v1a1/mono.m3u8?token=a9e738755002da6486fab510bf02ba48d354a143-8c-1779132392-1779132212" },
+  { channel: "disney1", source: "https://streamx550.com/global2.php?channel=disney1", stream: "https://zb533.streamingtv339.com/disney1/tracks-v1a1/mono.m3u8?token=97e5c37777ad139a458565e416e38fbb81fd8f02-5e-1779132405-1779132225" },
+  { channel: "espn", source: "https://streamx550.com/global2.php?channel=espn", stream: "https://dp744.streamingtv339.com/espn/tracks-v1a1/mono.m3u8?token=c9aba4ee9b749ccb9acecb0130e866726eb26771-1a-1779132416-1779132236" },
+  { channel: "max1", source: "https://streamx550.com/global2.php?channel=max1", stream: "https://pr745.streamingtv339.com/max1/tracks-v1a1/mono.m3u8?token=bec056c2f0210eb56ecc2fffaac723cea620bf00-bd-1779132427-1779132247" },
+  { channel: "universo", source: "https://streamx550.com/global2.php?channel=universo", stream: "https://zb533.streamingtv339.com/universo/tracks-v1a1/mono.m3u8?token=fee224fa7e524135ff160c0b887b115d7d2434fd-18-1779132438-1779132258" },
+  { channel: "disney2", source: "https://streamx550.com/global2.php?channel=disney2", stream: "https://dp744.streamingtv339.com/global/disney2/index.m3u8?token=fa7f7db0b90adb59cc7c13dd641dbe42693af98b-31-1779132448-1779132268" },
+  { channel: "max2", source: "https://streamx550.com/global2.php?channel=max2", stream: "https://pr745.streamingtv339.com/global/max2/index.m3u8?token=6b58775a7efd1f34c9b9423a89dff9e4e380578a-1a-1779132458-1779132278" },
+  { channel: "espn3", source: "https://streamx550.com/global2.php?channel=espn3", stream: "https://dp744.streamingtv339.com/espn3/tracks-v1a1/mono.m3u8?token=f1d006230636ee1751ddee5ef8d1c1733ffa257d-4c-1779132467-1779132287" },
+  { channel: "espn2mx", source: "https://streamx550.com/global2.php?channel=espn2mx", stream: "https://pr745.streamingtv339.com/espn2mx/tracks-v1a1/mono.m3u8?token=c2320834adabec7e205429b77a00f71b8664969c-c9-1779132477-1779132297" },
+  { channel: "espn5", source: "https://streamx550.com/global2.php?channel=espn5", stream: "https://zb533.streamingtv339.com/espn5/tracks-v1a1/mono.m3u8?token=9690e541325ced3155e036e72d2178ce7539ec17-28-1779132486-1779132306" },
+  { channel: "foxdeportes", source: "https://streamx550.com/global2.php?channel=foxdeportes", stream: "https://pr745.streamingtv339.com/foxdeportes/tracks-v1a1/mono.m3u8?token=534f07511ba3f8cc048cea1c1733224649846249-ac-1779132496-1779132316" }
+];
 
 // =====================================================
 // DICCIONARIO DE MAPEO DE LIGAS
