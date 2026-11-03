@@ -1,36 +1,451 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Cardboard VR</title>
-<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Retro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-html,body{margin:0;height:100%;overflow:hidden;background:#000}
-#a{position:fixed;top:8px;left:8px;z-index:99;color:white;background:rgba(0,0,0,.6);padding:8px;border-radius:8px;font-family:sans-serif}
+:root{
+  --bg:#050506; --ink:#f4f4f6; --mute:rgba(244,244,246,.55);
+  --line:rgba(255,255,255,.08); --accent:#b84df0; --accent-2:#dba2ff;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0}
+body{
+  min-height:100vh;color:var(--ink);background:var(--bg);
+  font:15px/1.5 "Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{ /* foco de luz arriba a la derecha y rejilla muy tenue */
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38% 30% at 78% -8%,rgba(255,255,255,.11),transparent 70%),
+    radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.2px) 0 0/26px 26px;
+}
+svg.sp{position:absolute;width:0;height:0}
+.ic{width:22px;height:22px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---- Estructura ---- */
+.shell{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;max-width:1260px;margin:0 auto;padding:20px}
+.main{min-width:0;padding:18px 8px 40px}
+
+/* ---- Barra lateral ---- */
+.side{
+  position:sticky;top:20px;align-self:start;height:calc(100vh - 40px);width:272px;
+  display:flex;flex-direction:column;gap:4px;padding:22px 20px;border-radius:36px;overflow-y:auto;scrollbar-width:none;
+  background:linear-gradient(180deg,#1a1a1c,#0d0d0e);border:1px solid var(--line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 60px rgba(0,0,0,.5);
+}
+.side::-webkit-scrollbar{display:none}
+.grp{display:contents}
+.side hr{border:0;height:1px;background:var(--line);margin:10px 6px;flex:none}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px 2px;flex:none}
+.logo-slot{width:34px;height:34px;flex:none;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.04)}
+.name-slot{font-weight:700;letter-spacing:-.02em;color:var(--mute);white-space:nowrap}
+.item{
+  all:unset;box-sizing:border-box;position:relative;flex:none;display:flex;align-items:center;gap:14px;
+  height:46px;padding:0 16px;border-radius:999px;cursor:pointer;font-weight:600;border:1px solid transparent;
+  transition:background .2s,box-shadow .2s;
+}
+.item:hover{background:rgba(255,255,255,.05)}
+.item:focus-visible,.btn:focus-visible,.game:focus-visible,.chip:focus-visible,.field:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+.item.active{
+  background:linear-gradient(90deg,rgba(176,70,235,.52),rgba(176,70,235,.1) 90%);
+  border-color:rgba(205,130,255,.45);
+  box-shadow:0 0 28px rgba(160,50,225,.34),inset 0 1px 0 rgba(255,255,255,.12);
+}
+.item.active::before{
+  content:"";position:absolute;left:-15px;top:13px;width:3px;height:18px;border-radius:3px;
+  background:var(--accent);box-shadow:0 0 10px var(--accent);
+}
+.lb{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ct{font-style:normal;font-size:12px;line-height:1;padding:4px 9px;border:1px solid rgba(255,255,255,.2);border-radius:999px;color:var(--mute)}
+.ct:empty{display:none}
+.tile{width:22px;flex:none;text-align:center;font:700 9px/1 "Manrope",sans-serif;letter-spacing:.02em;color:var(--accent-2)}
+.item .tile{display:grid;place-items:center;height:22px;width:26px;border:1px solid rgba(255,255,255,.16);border-radius:8px}
+
+/* ---- Contenido ---- */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:30px}
+.top>*{min-width:0}
+h1{font-size:clamp(28px,4vw,44px);line-height:1.06;letter-spacing:-.035em;font-weight:700;max-width:20ch}
+.sub{color:var(--mute);max-width:46ch;margin-top:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+.card{
+  padding:26px;border-radius:28px;border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+}
+.card h2{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.card p{color:var(--mute);margin:2px 0 18px}
+.drop{transition:border-color .2s,box-shadow .2s,background .2s}
+.drop.over{border-color:rgba(205,130,255,.7);box-shadow:0 0 34px rgba(160,50,225,.3);background:rgba(176,70,235,.1)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.field{
+  flex:1;min-width:0;width:100%;height:44px;border-radius:14px;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:var(--ink);padding:0 14px;font:inherit;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.field::placeholder{color:var(--mute)}
+.field:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(184,77,240,.25)}
+.search{width:min(280px,100%)}
+.search .field{border-radius:999px}
+.btn{
+  height:44px;padding:0 22px;border-radius:999px;border:1px solid var(--line);cursor:pointer;flex:none;
+  background:rgba(255,255,255,.07);color:var(--ink);font:inherit;font-weight:600;white-space:nowrap;
+  transition:background .2s,transform .15s,filter .2s;
+}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:linear-gradient(180deg,#a63fe0,#7e25c4);border-color:rgba(255,255,255,.18);color:#fff;box-shadow:0 8px 24px rgba(150,50,215,.35)}
+.btn.pri:hover{filter:brightness(1.12)}
+#msg{min-height:22px;margin-top:14px;font-size:13px;color:var(--accent-2)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:20px}
+.game{all:unset;cursor:pointer;display:block;box-sizing:border-box}
+.cover{
+  position:relative;aspect-ratio:4/5;border-radius:22px;overflow:hidden;display:grid;place-items:center;
+  background:linear-gradient(160deg,rgba(176,70,235,.28),rgba(255,255,255,.03) 70%);
+  border:1px solid var(--line);font-size:44px;font-weight:700;color:rgba(255,255,255,.4);
+  transition:transform .25s,border-color .25s,box-shadow .25s;
+}
+.cover img.art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.game:hover .cover{transform:translateY(-4px);border-color:rgba(205,130,255,.5);box-shadow:0 20px 44px rgba(160,50,225,.22)}
+.t{margin-top:12px;font-weight:600;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s{font-size:13px;color:var(--mute)}
+.badge{
+  display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;
+  font:700 11px/1 "Manrope",sans-serif;letter-spacing:.04em;color:var(--accent-2);
+  background:rgba(5,5,6,.68);border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.badge img{height:14px;display:block}
+.cover .badge{position:absolute;top:10px;left:10px}
+.empty{grid-column:1/-1;text-align:center;padding:60px 20px;border-radius:28px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.empty h3{font-size:18px;letter-spacing:-.02em}
+.empty p{color:var(--mute);margin:6px auto 0;max-width:44ch}
+
+dialog{
+  margin:auto;max-width:min(460px,calc(100% - 32px));width:100%;padding:26px;border-radius:28px;
+  color:var(--ink);background:#141416;border:1px solid var(--line);
+}
+dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+dialog h3{font-size:20px;letter-spacing:-.025em}
+dialog p{color:var(--mute);margin:4px 0 18px;overflow-wrap:anywhere}
+#askchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.chip{all:unset;cursor:pointer;height:36px;padding:0 16px;border-radius:999px;display:flex;align-items:center;font-weight:600;background:rgba(255,255,255,.07);transition:background .2s}
+.chip:hover{background:var(--accent)}
+
+#player{
+  position:fixed;inset:0;z-index:50;display:none;flex-direction:column;gap:10px;
+  padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));
+  background:rgba(4,3,6,.8);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);
+}
+#player.open{display:flex;animation:in .25s ease-out}
+@keyframes in{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
+.ptop{display:flex;align-items:center;gap:12px;padding:6px 6px 6px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.ptop .ti{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#frame{flex:1;width:100%;border:0;border-radius:24px;background:#000}
+
+/* ---- Tableta: barra compacta con solo iconos ---- */
+@media (max-width:1000px){
+  .shell{gap:16px}
+  .side{width:80px;padding:18px 14px;align-items:center}
+  .lb,.ct,.name-slot{display:none}
+  .item{width:52px;padding:0;justify-content:center}
+  .item.active::before{left:-12px}
+  .brand{padding:0}
+}
+/* ---- Móvil: barra inferior ---- */
+@media (max-width:640px){
+  .shell{grid-template-columns:minmax(0,1fr);padding:12px 12px 110px}
+  .main{padding:12px 4px}
+  .side{
+    position:fixed;z-index:20;top:auto;left:50%;transform:translateX(-50%);
+    bottom:calc(14px + env(safe-area-inset-bottom));width:calc(100% - 24px);max-width:520px;height:auto;
+    flex-direction:row;align-items:center;gap:2px;padding:8px;border-radius:999px;overflow-x:auto;overflow-y:hidden;
+  }
+  .brand{display:none}
+  .side hr{width:1px;height:26px;margin:0 6px}
+  .item.active::before{display:none}
+  .search{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<div id="a">Toca la pantalla una vez para habilitar sensores.</div>
 
-<a-scene embedded renderer="antialias:true;colorManagement:true">
-  <a-assets>
-    <a-asset-item id="room" src="./14_6_2026.glb"></a-asset-item>
-  </a-assets>
+<svg class="sp" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-lib" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V4m0 0L8 8m4-4 4 4M5 16v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"/></symbol>
+</svg>
 
-  <a-light type="ambient" intensity="2"></a-light>
-  <a-light type="directional" intensity="1.5" position="5 10 5"></a-light>
+<div class="shell">
+  <nav class="side" aria-label="Principal">
+    <div class="brand">
+      <!-- LOGO: reemplaza este div por <img src="logo.svg" alt="" width="34" height="34"> -->
+      <div class="logo-slot" aria-hidden="true"></div>
+      <!-- NOMBRE: escribe aquí el nombre de tu web -->
+      <div class="name-slot">Nombre de la web</div>
+    </div>
+    <hr>
+    <button class="item" data-view="home" title="Inicio"><svg class="ic"><use href="#i-home"/></svg><span class="lb">Inicio</span></button>
+    <button class="item" data-view="lib" title="Biblioteca"><svg class="ic"><use href="#i-lib"/></svg><span class="lb">Biblioteca</span><em class="ct" id="nlib"></em></button>
+    <hr id="syshr" hidden>
+    <div class="grp" id="sysnav"></div>
+    <hr>
+    <button class="item" id="pick" title="Cargar ROM"><svg class="ic"><use href="#i-up"/></svg><span class="lb">Cargar ROM</span></button>
+    <input id="file" type="file" hidden>
+  </nav>
 
-  <a-entity gltf-model="#room" rotation="0 180 0"></a-entity>
+  <main class="main">
+    <section id="v-home">
+      <header class="top">
+        <div>
+          <h1>Juegos clásicos, directo en tu navegador.</h1>
+          <p class="sub">Arrastra una ROM o pega un enlace. Detectamos el sistema y la carátula por ti.</p>
+        </div>
+      </header>
+      <div class="cards">
+        <div class="card drop" id="drop">
+          <h2>Desde tu equipo</h2>
+          <p>Suelta aquí una ROM (.nes, .sfc, .gba, .zip y más).</p>
+          <button class="btn pri" id="pick2">Elegir archivo</button>
+        </div>
+        <div class="card">
+          <h2>Desde un enlace</h2>
+          <p>Debe ser un enlace directo al archivo.</p>
+          <div class="row">
+            <input id="url" class="field" type="url" placeholder="https://…" aria-label="Enlace directo a la ROM">
+            <button class="btn pri" id="playUrl">Abrir</button>
+          </div>
+        </div>
+      </div>
+      <div id="msg" role="status"></div>
+    </section>
 
-  <a-entity id="rig" position="0 0.9 0">
-      <a-camera look-controls="magicWindowTrackingEnabled:true"></a-camera>
-  </a-entity>
-</a-scene>
+    <section id="v-lib" hidden>
+      <header class="top">
+        <h1 id="ltitle">Biblioteca</h1>
+        <div class="search"><input id="q" class="field" type="search" placeholder="Buscar juegos" aria-label="Buscar juegos"></div>
+      </header>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+</div>
+
+<dialog id="ask">
+  <h3>¿De qué sistema es?</h3>
+  <p id="askname"></p>
+  <div id="askchips"></div>
+  <button class="btn" id="askcancel">Cancelar</button>
+</dialog>
+
+<div id="player" role="dialog" aria-modal="true" aria-label="Reproductor">
+  <div class="ptop"><span id="pbadge"></span><span class="ti" id="ptitle"></span><button class="btn" id="close">Cerrar</button></div>
+  <iframe id="frame" allow="autoplay; fullscreen; gamepad; clipboard-write" title="Emulador"></iframe>
+</div>
 
 <script>
-// evita problemas al rotar
-screen.orientation?.lock?.("landscape").catch(()=>{});
+/* ---- Catálogo propio ----
+   { title:'Mi juego', rom:'roms/mi-juego.zip', core:'snes' (opcional), cover:'covers/x.png' (opcional) }
+   Si omites core y cover, se detectan solos. */
+const GAMES = [
+];
+
+/* core: [nombre, abreviatura, carpetas de carátulas en libretro-thumbnails] */
+const SYS = {
+  nes:['NES','NES',['Nintendo - Nintendo Entertainment System']],
+  snes:['Super Nintendo','SNES',['Nintendo - Super Nintendo Entertainment System']],
+  gb:['Game Boy / Color','GB',['Nintendo - Game Boy','Nintendo - Game Boy Color']],
+  gba:['Game Boy Advance','GBA',['Nintendo - Game Boy Advance']],
+  n64:['Nintendo 64','N64',['Nintendo - Nintendo 64']],
+  nds:['Nintendo DS','NDS',['Nintendo - Nintendo DS']],
+  segaMD:['Mega Drive','MD',['Sega - Mega Drive - Genesis']],
+  segaMS:['Master System','SMS',['Sega - Master System - Mark III']],
+  segaGG:['Game Gear','GG',['Sega - Game Gear']],
+  psx:['PlayStation','PS1',['Sony - PlayStation']],
+  atari2600:['Atari 2600','2600',['Atari - 2600']],
+  arcade:['Arcade','ARC',['MAME']]
+};
+const EXT = {
+  nes:'nes', sfc:'snes', smc:'snes', gb:'gb', gbc:'gb', gba:'gba', n64:'n64', z64:'n64', v64:'n64',
+  nds:'nds', md:'segaMD', gen:'segaMD', smd:'segaMD', sms:'segaMS', gg:'segaGG', a26:'atari2600', pbp:'psx'
+};
+const CDN = 'https://cdn.emulatorjs.org/stable/data/';
+const $ = id => document.getElementById(id);
+const ext = n => n.split('.').pop().toLowerCase();
+const stem = n => n.replace(/\.[A-Za-z0-9]{1,4}$/, '').replace(/\[[^\]]*\]/g, '').replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+const probe = u => new Promise(r => { const i = new Image(); i.onload = () => r(u); i.onerror = () => r(null); i.src = u; });
+let view = 'home', system = 'all', query = '';
+const lib = GAMES.map(g => ({ ...g, core: g.core || EXT[ext(g.rom)] || 'nes' }));
+
+/* ---------- Detección de sistema: extensión, contenido del zip y cabecera ---------- */
+async function zipNames(file) {
+  const n = Math.min(file.size, 65557), dv = new DataView(await file.slice(file.size - n).arrayBuffer());
+  let e = -1; for (let i = n - 22; i >= 0; i--) if (dv.getUint32(i, true) === 0x06054b50) { e = i; break; }
+  if (e < 0) return [];
+  let cnt = dv.getUint16(e + 10, true), off = dv.getUint32(e + 16, true) - (file.size - n), out = [];
+  const dec = new TextDecoder();
+  while (cnt-- > 0 && off >= 0 && off + 46 <= n && dv.getUint32(off, true) === 0x02014b50) {
+    const l = dv.getUint16(off + 28, true), x = dv.getUint16(off + 30, true), c = dv.getUint16(off + 32, true);
+    out.push(dec.decode(new Uint8Array(dv.buffer, off + 46, l))); off += 46 + l + x + c;
+  }
+  return out;
+}
+function sniff(b) {
+  const s = (o, t) => [...t].every((c, i) => b[o + i] === c.charCodeAt(0));
+  const h = (o, ...v) => v.every((x, i) => b[o + i] === x);
+  if (s(0, 'NES') && b[3] === 0x1A) return 'nes';
+  if (h(0, 0x80, 0x37, 0x12, 0x40) || h(0, 0x37, 0x80, 0x40, 0x12) || h(0, 0x40, 0x12, 0x37, 0x80)) return 'n64';
+  if (s(0x100, 'SEGA')) return 'segaMD';
+  if (h(0xC0, 0x24, 0xFF, 0xAE, 0x51, 0x69, 0x9A, 0xA2, 0x21)) return 'nds';
+  if (h(4, 0x24, 0xFF, 0xAE, 0x51) && b[0xB2] === 0x96) return 'gba';
+  if (h(0x104, 0xCE, 0xED, 0x66, 0x66)) return 'gb';
+  if ([0x1FF0, 0x3FF0, 0x7FF0].some(o => s(o, 'TMR SEGA'))) return 'segaMS';
+  if (s(0x8008, 'PLAYSTATION')) return 'psx';
+  return null;
+}
+async function detect(src) {
+  const x = ext(src.name);
+  if (EXT[x]) return EXT[x];
+  if (x === 'zip' && src.file) {
+    try { for (const n of await zipNames(src.file)) if (EXT[ext(n)]) return EXT[ext(n)]; } catch {}
+  }
+  if (x !== 'zip') {
+    try {
+      const buf = src.file ? await src.file.slice(0, 0x8100).arrayBuffer()
+        : await (await fetch(src.url, { headers: { Range: 'bytes=0-33023' } })).arrayBuffer();
+      return sniff(new Uint8Array(buf));
+    } catch {}
+  }
+  return null;
+}
+function ask(name) {
+  return new Promise(res => {
+    const d = $('ask'), box = $('askchips'); box.replaceChildren(); $('askname').textContent = name;
+    for (const k in SYS) {
+      const b = document.createElement('button'); b.className = 'chip'; b.textContent = SYS[k][0];
+      b.onclick = () => d.close(k); box.append(b);
+    }
+    d.returnValue = ''; d.onclose = () => res(d.returnValue || null); d.showModal();
+  });
+}
+$('askcancel').onclick = () => $('ask').close('');
+
+/* ---------- Carátulas (libretro-thumbnails) con caché local ---------- */
+async function findCover(title, core) {
+  const key = 'cv|' + core + '|' + title; let c = null;
+  try { c = localStorage.getItem(key); } catch {}
+  if (c !== null) return c || null;
+  const base = title.replace(/[&*\/:`<>?\\|"]/g, '_');
+  const regs = /\(.+\)/.test(base) ? [''] : ['', ' (USA)', ' (Europe)', ' (Japan)', ' (World)', ' (USA, Europe)'];
+  let found = null;
+  outer: for (const sys of SYS[core][2]) for (const r of regs) {
+    found = await probe(`https://thumbnails.libretro.com/${encodeURIComponent(sys)}/Named_Boxarts/${encodeURIComponent(base + r)}.png`);
+    if (found) break outer;
+  }
+  try { localStorage.setItem(key, found || ''); } catch {}
+  return found;
+}
+
+/* ---------- Insignias: logos/<core>.svg si existe; si no, insignia de texto ---------- */
+const logos = {};
+function badge(core) {
+  const el = document.createElement('span'); el.className = 'badge'; el.textContent = SYS[core][1];
+  (logos[core] ??= probe(`logos/${core}.svg`)).then(u => {
+    if (!u) return; const i = new Image(); i.src = u; i.alt = SYS[core][0]; el.replaceChildren(i);
+  });
+  return el;
+}
+
+/* ---------- Navegación e interfaz ---------- */
+function setView(v) { view = v; $('v-home').hidden = v !== 'home'; $('v-lib').hidden = v !== 'lib'; renderNav(); renderGrid(); }
+function renderNav() {
+  const counts = {}; lib.forEach(g => counts[g.core] = (counts[g.core] || 0) + 1);
+  $('nlib').textContent = lib.length || '';
+  document.querySelectorAll('[data-view]').forEach(b =>
+    b.classList.toggle('active', b.dataset.view === view && (view === 'home' || system === 'all')));
+  const box = $('sysnav'); box.replaceChildren();
+  $('syshr').hidden = !lib.length;
+  for (const k in SYS) if (counts[k]) {
+    const b = document.createElement('button'); b.className = 'item' + (view === 'lib' && system === k ? ' active' : '');
+    b.title = SYS[k][0];
+    b.innerHTML = '<span class="tile"></span><span class="lb"></span><em class="ct"></em>';
+    b.children[0].textContent = SYS[k][1]; b.children[1].textContent = SYS[k][0]; b.children[2].textContent = counts[k];
+    b.onclick = () => { system = k; setView('lib'); };
+    box.append(b);
+  }
+}
+document.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { system = 'all'; setView(b.dataset.view); });
+
+function renderGrid() {
+  const g = $('grid'); g.replaceChildren();
+  $('ltitle').textContent = system === 'all' ? 'Biblioteca' : SYS[system][0];
+  const list = lib.filter(x => (system === 'all' || x.core === system) && x.title.toLowerCase().includes(query));
+  if (!list.length) {
+    const e = document.createElement('div'); e.className = 'empty'; e.innerHTML = '<h3></h3><p></p>';
+    e.firstChild.textContent = lib.length ? 'Sin resultados' : 'Tu biblioteca está vacía';
+    e.lastChild.textContent = lib.length ? 'Prueba con otra búsqueda o sistema.' : 'Las ROMs que cargues aparecerán aquí mientras dure la sesión.';
+    g.append(e); return;
+  }
+  for (const x of list) {
+    const b = document.createElement('button'); b.className = 'game';
+    const c = document.createElement('div'); c.className = 'cover'; c.textContent = x.title.charAt(0).toUpperCase();
+    c.append(badge(x.core));
+    const show = u => { if (!u) return; const i = new Image(); i.className = 'art'; i.alt = ''; i.src = u; c.prepend(i); };
+    x.cover ? show(x.cover) : findCover(x.title, x.core).then(show);
+    const t = document.createElement('div'); t.className = 't'; t.textContent = x.title;
+    const s = document.createElement('div'); s.className = 's'; s.textContent = SYS[x.core][0];
+    b.append(c, t, s); b.onclick = () => play(x); g.append(b);
+  }
+}
+$('q').oninput = e => { query = e.target.value.trim().toLowerCase(); renderGrid(); };
+
+/* ---------- Reproductor ---------- */
+function hash(s) { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % 2147483647 || 1; }
+function play(x) {
+  const cfg = {
+    EJS_player:'#game', EJS_core:x.core, EJS_gameUrl:new URL(x.rom, location.href).href, EJS_gameName:x.title,
+    EJS_gameID:hash(x.title + x.core), EJS_pathtodata:CDN, EJS_color:'#b84df0'
+  };
+  const js = Object.entries(cfg).map(([k, v]) => k + '=' + JSON.stringify(v)).join(';').replace(/</g, '\\u003c');
+  $('frame').srcdoc = '<!DOCTYPE html><html><body style="margin:0;background:#000"><div style="width:100%;height:100vh"><div id="game"></div></div><script>'
+    + js + ';<\/script><script src="' + CDN + 'loader.js"><\/script></body></html>';
+  $('ptitle').textContent = x.title; $('pbadge').replaceChildren(badge(x.core));
+  $('player').classList.add('open');
+}
+function closePlayer() { $('player').classList.remove('open'); $('frame').srcdoc = ''; }
+$('close').onclick = closePlayer;
+addEventListener('keydown', e => { if (e.key === 'Escape' && !$('ask').open) closePlayer(); });
+
+/* ---------- Cargar ROMs ---------- */
+const msg = t => $('msg').textContent = t;
+async function openSource(src) {
+  msg('Analizando…');
+  let core = await detect(src);
+  if (!core) core = await ask(src.name);
+  if (!core) return msg('');
+  const g = { title: stem(src.name) || 'Juego', core, rom: src.url || URL.createObjectURL(src.file) };
+  lib.unshift(g); system = 'all'; msg(''); setView('lib'); play(g);
+}
+const fromFile = f => openSource({ name: f.name, file: f });
+$('pick').onclick = $('pick2').onclick = () => $('file').click();
+$('file').onchange = e => { if (e.target.files[0]) fromFile(e.target.files[0]); e.target.value = ''; };
+$('playUrl').onclick = () => {
+  const u = $('url').value.trim(); if (!u) return;
+  let n = 'Juego'; try { n = decodeURIComponent(new URL(u).pathname.split('/').pop()) || n; } catch { return msg('El enlace no es válido.'); }
+  openSource({ name: n, url: u });
+};
+const dz = $('drop');
+['dragenter', 'dragover'].forEach(t => dz.addEventListener(t, e => { e.preventDefault(); dz.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => dz.addEventListener(t, e => { e.preventDefault(); dz.classList.remove('over'); }));
+dz.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) fromFile(f); });
+
+setView('home');
 </script>
 </body>
 </html>
